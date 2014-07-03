@@ -1,0 +1,17 @@
+{
+  "name" : "meitaospider",
+  "description" : "A spider for meitao",
+  "dependencies" : {
+    "jquery" : "2.1.0",
+    "mysql" : "2.0.0-alpha8",
+    "async" : "0.2.10",
+    "orm" : "2.1.4",
+    "crawler" : "0.2.5",
+    "winston" : ">= 0.7.2",
+    "cheerio" : ">= 0.16.0"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/meimeitao/meitaospider.git"
+  }
+}
