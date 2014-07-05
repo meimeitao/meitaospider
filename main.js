@@ -1,4 +1,4 @@
-var config = require("./config.json");
+//var config = require("./config.json");
 
 var request = require('request');
 var cheerio = require('cheerio');
