@@ -5,4 +5,4 @@
 ### install
 
     npm install
-    node main.js
+    node app.js
