@@ -9,7 +9,6 @@
     "jquery"   : "2.1.0",
     "cheerio"  : ">=0.16.0",
     "request"  : ">=2.36.0",
-    "iconv-lite" : "",
     "urls":""
   },
   "repository" : {
