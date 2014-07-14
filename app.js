@@ -30,18 +30,48 @@ app.get('/fetch', function(req, res){
     //console.log(body);
     var $ = cheerio.load(body);
     parser = '';
-    switch(urls.parse(url).hostname){
+    hostname = urls.parse(url).hostname;
+    console.log(hostname);
+    switch(hostname){
       case "item.taobao.com":
         parser = './parser/taobao.js';
         break;
       case "item.jd.com":
         parser = './parser/jd.js';
         break;
-      case "amazon.cn":
+      case "www.amazon.cn":
         parser = './parser/amazoncn.js';
+        break;
+      case "www.amazon.com":
+        parser = './parser/amazon.js';
+        break;
+      case "www.drugstore.com":
+        parser = './parser/drugstore.js';
+        break;
+      case "web1.sasa.com":
+        parser = './parser/sasa.js';
+        break;
+      case "www.lookfantastic.com":
+        parser = './parser/lookfantastic.js';
+        break;
+      case "global.lotte.com":
+        parser = './parser/lotte.js';
+        break;
+      case "www.ebay.com":
+        parser = './parser/ebay.js';
+        break;
+      case "www.suning.com":
+      case "product.suning.com":
+      case "sale.suning.com":
+        parser = './parser/suning.js';
+        break;
+      case "mall.jumei.com":
+        parser = './parser/jumeimall.js';
         break;
       default:
         console.log("parser not found "+url);
+        res.set('Content-Type', 'application/json');
+        res.send('{}');
         break;
     }
     if(parser != ""){
