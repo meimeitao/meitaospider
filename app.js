@@ -3,10 +3,30 @@ var request = require('request');
 var cheerio = require('cheerio');
 var urls = require('url');
 var spawn = require('child_process').spawn
+var log4js = require('log4js');
+
+log4js.configure({
+  appenders: [
+    { type: 'console' },
+    {
+      type: 'file',
+      filename: 'logs/access.log',
+      maxLogSize: 1024,
+      backups:3,
+      category: 'normal'
+    }
+  ],
+  replaceConsole: true
+});
+var logger = log4js.getLogger('normal');
+logger.setLevel('INFO');
 
 var app = express();
 app.set('view engine', 'jade');
 app.set('views', __dirname);
+
+app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}));
+app.use(app.router);
 
 app.get('/', function(req, res){
   res.render('index');
