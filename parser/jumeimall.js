@@ -4,7 +4,7 @@ module.exports = function($) {
   	var obj = {};
     var title = this.$("title").text();
   	obj.title = title.replace(/(^\s*)|(\s*$)/g, "");
-    var price = this.$(".price .mall_price").text();
+    var price = this.$(".price #mall_price").text();
   	obj.price = price;
     var imgs = Array();
     this.$(".ac_container").find("img").each(function(i, elem){
