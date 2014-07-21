@@ -12,6 +12,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = 'EUR';
+    obj.en = 'lookfantastic';
   	return JSON.stringify(obj);
   };
 }

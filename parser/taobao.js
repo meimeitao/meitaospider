@@ -10,6 +10,8 @@ module.exports = function($) {
       obj.img = imgs;
     });
     obj.img = imgs;
+    obj.currency = 'RMB';
+    obj.en = 'taobao';
   	return JSON.stringify(obj);
   };
 }

@@ -11,6 +11,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = 'USD';
+    obj.en = 'drugstroe';
   	return JSON.stringify(obj);
   };
 }

@@ -11,6 +11,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = 'USD';
+    obj.en = 'amazon';
   	return JSON.stringify(obj);
   };
 }

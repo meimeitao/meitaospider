@@ -13,6 +13,7 @@ module.exports = function($) {
       obj.url = $(this).attr("href");
     });
     obj.currency = 'RMB';
+    obj.en = 'jingdong';
   	return JSON.stringify(obj);
   };
 }

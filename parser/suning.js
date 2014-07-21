@@ -14,6 +14,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = 'RMB';
+    obj.en = 'suning';
   	return JSON.stringify(obj);
   };
 }

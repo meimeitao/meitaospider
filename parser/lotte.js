@@ -12,6 +12,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = 'KRW';
+    obj.en = 'lotte';
   	return JSON.stringify(obj);
   };
 }

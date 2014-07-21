@@ -12,6 +12,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = 'RMB';
+    obj.en = 'sasa';
   	return JSON.stringify(obj);
   };
 }
