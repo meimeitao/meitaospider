@@ -11,7 +11,7 @@ module.exports = function($) {
     });
     obj.img = imgs;
     obj.currency = this.$(".tm-yen").first().text();
-    obj.en = 'tmall';
+    obj.en = 'tmallhk';
   	return JSON.stringify(obj);
   };
-}
+};
