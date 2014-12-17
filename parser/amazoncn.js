@@ -3,7 +3,9 @@ module.exports = function($) {
   this.getJSON = function() {
   	var obj = {};
   	obj.title = this.$("title").text();
-  	obj.price = this.$("#priceblock_ourprice").text();
+  	tmpprice = this.$("#priceblock_ourprice").text();
+    if (!tmpprice) tmpprice = this.$(".a-color-price").first().text();
+    obj.price = tmpprice;
     obj.en = 'amazoncn';
   	return JSON.stringify(obj);
   };
