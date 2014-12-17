@@ -62,6 +62,9 @@ app.get('/fetch', function(req, res){
       case "detail.tmall.hk":
         parser = './parser/tmallhk.js';
         break;
+      case "chaoshi.detail.tmall.com":
+        parser = './parser/tmallchaoshi.js';
+        break;
       case "item.jd.com":
         parser = './parser/jd.js';
         break;
