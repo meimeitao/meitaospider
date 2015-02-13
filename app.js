@@ -32,6 +32,34 @@ app.get('/', function(req, res){
   res.render('index');
 });
 
+app.get('/post', function(req, res){
+  var url = req.query.url;
+  var mytrakpaknumber = req.query.mytrakpaknumber;
+  var parser = '';
+  var body = '';
+
+  pt = spawn('phantomjs', ['--load-images=false', 'phantompost.js', url, mytrakpaknumber]);
+
+  pt.stdout.on('data', function (data) {
+    body += data
+  });
+  
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+  
+  pt.on('close', function (code) {
+    var $ = cheerio.load(body);
+    var Parser = require("./parser/trackmytrakpak.js");
+    var p = new Parser($);
+    var j = p.getJSON();
+
+    res.set('Content-Type', 'application/json');
+    res.send(j);
+  });
+
+});
+
 app.get('/fetch', function(req, res){
   var url = req.query.url
   var parser = '';
