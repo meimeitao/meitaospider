@@ -52,7 +52,12 @@ app.get('/post', function(req, res){
     var $ = cheerio.load(body);
     var Parser = require("./parser/trackmytrakpak.js");
     var p = new Parser($);
-    var j = p.getJSON();
+    try {
+      var j = p.getJSON();
+    } catch (e) {
+      console.log(e.message);
+      var j = {'status':'001','msg':e.message};
+    }
 
     res.set('Content-Type', 'application/json');
     res.send(j);
