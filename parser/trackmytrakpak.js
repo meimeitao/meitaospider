@@ -9,8 +9,13 @@ module.exports = function($) {
       $(this).children('th').each(function() {
         key = $(this).text();
         if (key == 'Carrier:') {
-          value = $(this).next().children("input").attr("onclick").split("','")[0];
-          value = value.split("'")[1];
+          cv = $(this).next().children("input").attr("onclick");
+          if (cv) {
+            value = cv.split("','")[0];
+            value = value.split("'")[1];
+          } else {
+            value = '';
+          }
         } else {
           value = $(this).next().text();
         }
