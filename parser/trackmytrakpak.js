@@ -2,7 +2,7 @@ module.exports = function($) {
   this.$ = $;
   this.getJSON = function() {
   	var obj = {};
-    var detailContainer = this.$(".col-md-12").eq(0).find($("tr"));
+    var detailContainer = $(".col-md-12").first().find("tr");
     var detail = {};
     var key,value;
     detailContainer.each(function() {
@@ -23,11 +23,11 @@ module.exports = function($) {
       });
     });
     var shipment = [];
-    var shipmentContainer = this.$(".col-md-12").eq(1).find($("tr"));
+    var shipmentContainer = $(".col-md-12").eq(1).find("tr");
     shipmentContainer.each(function(i,el) {
       if (i > 0) {
         shipment.push({
-          time: $(this).children('td').eq(0).text()
+          time: $(this).children('td').first().text()
           , activity: $(this).children('td').eq(1).text()
           , code: $(this).children('td').eq(2).text()
         });
