@@ -116,6 +116,18 @@ app.get('/fetch', function(req, res){
       case "www.lookfantastic.com":
         parser = './parser/lookfantastic.js';
         break;
+      case "www.mankind.co.uk":
+        parser = './parser/mankind.js';
+        break;
+      case "www.hqhair.com":
+        parser = './parser/hqhair.js';
+        break;
+      case "www.gilt.com":
+        parser = './parser/gilt.js';
+        break;
+      case "www.thehut.com":
+        parser = './parser/thehut.js';
+        break;
       case "global.lotte.com":
         parser = './parser/lotte.js';
         break;
