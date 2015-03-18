@@ -9,6 +9,7 @@ module.exports = function($) {
     if (!tmpprice) tmpprice = this.$("#priceblock_saleprice").text();
     if (!tmpprice) tmpprice = this.$(".a-color-price").first().text();
     if (!tmpprice) tmpprice = this.$(".priceLarge").first().text();
+    obj.currency = 'RMB'
     obj.price = tmpprice;
     obj.en = 'amazoncn';
   	return JSON.stringify(obj);
