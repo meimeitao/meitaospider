@@ -27,9 +27,9 @@ module.exports = function($) {
     shipmentContainer.each(function(i,el) {
       if (i > 0) {
         shipment.push({
-          time: $(this).children('td').first().text()
-          , activity: $(this).children('td').eq(1).text()
-          , code: $(this).children('td').eq(2).text()
+          time: $(this).children('td').first().text().trim()
+          , activity: $(this).children('td').eq(1).text().trim()
+          , code: $(this).children('td').eq(2).text().trim()
         });
       }
     });
