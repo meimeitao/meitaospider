@@ -65,6 +65,65 @@ app.get('/post', function(req, res){
 
 });
 
+app.get('/crawler', function(req, res) {
+  var url = req.query.url;
+  var parser = '';
+  var body = '';
+
+  pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
+
+  pt.stdout.on('data', function (data) {
+    body += data
+  });
+  
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  pt.on('close', function(code) {
+    var $ = cheerio.load(body);
+    hostname = urls.parse(url).hostname;
+    switch(hostname) {
+      case "item.taobao.com":
+        parser = './parser/taobao.js';
+        break;
+      case "detail.tmall.com":
+        parser = './parser/tmall.js';
+        break;
+      case "www.amazon.cn":
+        parser = './parser/amazoncn.js';
+        break;
+      case "www.suning.com":
+      case "product.suning.com":
+      case "sale.suning.com":
+        parser = './parser/suning.js';
+        break;
+      case "chaoshi.detail.tmall.com":
+        parser = './parser/tmallchaoshi.js';
+        break;
+      case "detail.tmall.hk":
+        parser = './parser/tmallhk.js';
+        break;
+      case "item.jd.com":
+        parser = './parser/jd.js';
+        break;
+      default:
+        console.log("parser not found "+url);
+        res.set('Content-Type', 'application/json');
+        res.send('{}');
+        break;
+    }
+    if(parser != ""){
+      var Parser = require(parser);
+      var p = new Parser($);
+      var j = p.getJSON();
+
+      res.set('Content-Type', 'application/json');
+      res.send(j);
+    }
+  });
+});
+
 app.get('/fetch', function(req, res){
   var url = req.query.url
   var parser = '';
