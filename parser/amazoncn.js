@@ -9,6 +9,11 @@ module.exports = function($) {
     if (!tmpprice) tmpprice = this.$("#priceblock_saleprice").text();
     if (!tmpprice) tmpprice = this.$(".a-color-price").first().text();
     if (!tmpprice) tmpprice = this.$(".priceLarge").first().text();
+    var imgs = Array();
+    this.$("#altImages").find("img").each(function(i, el) {
+      imgs.push($(this).attr("src").replace(/._SS40_./,"._SL1500_."));
+    });
+    obj.img = imgs;
     obj.currency = 'RMB'
     obj.price = tmpprice;
     obj.en = 'amazoncn';

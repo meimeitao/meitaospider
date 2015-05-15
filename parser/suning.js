@@ -2,15 +2,14 @@ module.exports = function($) {
   this.$ = $;
   this.getJSON = function() {
   	var obj = {};
-    var title = this.$(".product-main-title h1").text();
+    var title = this.$("#itemDisplayName").text();
   	obj.title = title;
-    var price = this.$(".main-price em").text();
+    var price = this.$(".mainprice").text();
   	obj.price = price;
     var imgs = Array();
-    this.$(".thumbnai-box").find("img").each(function(i, elem){
-      realimg = $(this).attr("src");
-      imgdata = realimg.split(".");
-      imgs.push(realimg.replace("."+imgdata[imgdata.length-1],'f.'+imgdata[imgdata.length-1]));
+    this.$(".imgzoom-thumb-main").find("img").each(function(i, elem){
+      realimg = $(this).attr("src-large");
+      imgs.push(realimg);
     });
     obj.img = imgs;
     obj.currency = 'RMB';
