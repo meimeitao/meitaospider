@@ -84,6 +84,7 @@ app.get('/crawler', function(req, res) {
     var $ = cheerio.load(body);
     hostname = urls.parse(url).hostname;
     switch(hostname) {
+      case "tb.cn":
       case "item.taobao.com":
         parser = './parser/taobao.js';
         break;
