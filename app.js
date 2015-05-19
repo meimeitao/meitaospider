@@ -88,6 +88,7 @@ app.get('/crawler', function(req, res) {
       case "item.taobao.com":
         parser = './parser/taobao.js';
         break;
+      case "detail.m.tmall.com":
       case "detail.tmall.com":
         parser = './parser/tmall.js';
         break;
