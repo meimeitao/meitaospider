@@ -117,6 +117,9 @@ app.get('/crawler', function(req, res) {
       case "item.jd.com":
         parser = './parser/jd.js';
         break;
+      case "m.mashort.cn":
+        parser = './parser/mashort.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
