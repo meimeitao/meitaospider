@@ -43,11 +43,11 @@ app.get('/post', function(req, res){
   pt.stdout.on('data', function (data) {
     body += data
   });
-  
+
   pt.stderr.on('data', function (data) {
     console.log('stderr: ' + data);
   });
-  
+
   pt.on('close', function (code) {
     var $ = cheerio.load(body);
     var Parser = require("./parser/trackmytrakpak.js");
@@ -75,7 +75,7 @@ app.get('/crawler', function(req, res) {
   pt.stdout.on('data', function (data) {
     body += data
   });
-  
+
   pt.stderr.on('data', function (data) {
     console.log('stderr: ' + data);
   });
@@ -118,6 +118,7 @@ app.get('/crawler', function(req, res) {
         parser = './parser/jd.js';
         break;
       case "m.mashort.cn":
+      case "b.mashort.cn":
         parser = './parser/mashort.js';
         break;
       default:
