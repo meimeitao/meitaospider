@@ -83,48 +83,49 @@ app.get('/crawler', function(req, res) {
   pt.on('close', function(code) {
     var $ = cheerio.load(body);
     hostname = urls.parse(url).hostname;
-    switch(hostname) {
-      case "tb.cn":
-      case "item.taobao.com":
-        parser = './parser/taobao.js';
-        break;
-      case "h5.m.taobao.com":
-        parser = './parser/h5mtaobao.js';
-        break;
-      case "detail.m.tmall.com":
-        parser = './parser/mtmall.js';
-        break;
-      case "detail.tmall.com":
-        parser = './parser/tmall.js';
-        break;
-      case "www.amazon.cn":
-        parser = './parser/amazoncn.js';
-        break;
-      case "www.suning.com":
-      case "product.suning.com":
-      case "sale.suning.com":
-        parser = './parser/suning.js';
-        break;
-      case "chaoshi.detail.tmall.com":
-        parser = './parser/tmallchaoshi.js';
-        break;
-      case "detail.tmall.hk":
-        parser = './parser/tmallhk.js';
-        break;
-      case "item.m.jd.com":
-        parser = './parser/mjd.js';
-        break;
-      case "item.jd.com":
-        parser = './parser/jd.js';
-        break;
-      case "m.mashort.cn":
-        parser = './parser/mashort.js';
-        break;
-      default:
-        console.log("parser not found "+url);
-        res.set('Content-Type', 'application/json');
-        res.send('{}');
-        break;
+    if (hostname.indexOf("mashort.cn") > -1) {
+      parser = './parser/mashort.js';
+    } else {
+      switch(hostname) {
+        case "tb.cn":
+        case "item.taobao.com":
+          parser = './parser/taobao.js';
+          break;
+        case "h5.m.taobao.com":
+          parser = './parser/h5mtaobao.js';
+          break;
+        case "detail.m.tmall.com":
+          parser = './parser/mtmall.js';
+          break;
+        case "detail.tmall.com":
+          parser = './parser/tmall.js';
+          break;
+        case "www.amazon.cn":
+          parser = './parser/amazoncn.js';
+          break;
+        case "www.suning.com":
+        case "product.suning.com":
+        case "sale.suning.com":
+          parser = './parser/suning.js';
+          break;
+        case "chaoshi.detail.tmall.com":
+          parser = './parser/tmallchaoshi.js';
+          break;
+        case "detail.tmall.hk":
+          parser = './parser/tmallhk.js';
+          break;
+        case "item.m.jd.com":
+          parser = './parser/mjd.js';
+          break;
+        case "item.jd.com":
+          parser = './parser/jd.js';
+          break;
+        default:
+          console.log("parser not found "+url);
+          res.set('Content-Type', 'application/json');
+          res.send('{}');
+          break;
+      }
     }
     if(parser != ""){
       var Parser = require(parser);
