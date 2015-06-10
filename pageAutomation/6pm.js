@@ -39,20 +39,13 @@ casper.then(function(term) {
         ele.dispatchEvent(evt);
       }, m, tmpTarget);
     }
-    this.capture('runtime/screenshot_'+x+'.png');
-    s = this.evaluate(function() {
-      //return document.querySelector("#d3").getAttribute("value");
-      return document.getElementById("d3").value;
-    });
-    //console.log(s);
+    //this.capture('runtime/screenshot_'+x+'.png');
     stockValue = this.evaluate(function getStockStatus() {
-      //console.log(document.querySelector("#addToCart").getAttribute(""));
       return document.querySelector("#addToCart").getAttribute("disabled");
     });
     stockMapping[x].soldout = stockValue == 'disabled' ? 1 : 0;
   }
   utils.dump(stockMapping);
-  //console.log(stockMapping);
 });
 
 casper.run(function() {

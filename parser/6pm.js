@@ -3,11 +3,10 @@ var cartesianProduct = require('cartesian-product');
 module.exports = function($) {
   this.$ = $;
   this.getJSON = function() {
-  	var properties = [], tmpProperties = {}, tmpIndex, tmpDimension, tmpVal, tmpName, propertyHash = {}, propertiesArray = [], tmpPropertiesArray = [];
+  	var properties = [], tmpProperties = {}, tmpIndex, tmpVal, tmpName, propertyHash = {}, propertiesArray = [], tmpPropertiesArray = [];
     this.$("#prForm select").each(function() {
       tmpProperties = {};
       tmpPropertiesArray = [];
-      tmpDimension = $(this);
       $(this).children("option").each(function() {
         tmpVal = $(this).val();
         if (tmpVal.indexOf("-1_") == -1) {
@@ -15,10 +14,7 @@ module.exports = function($) {
           tmpPropertiesArray.push(tmpVal);
         }
       });
-      tmpName = $(this).children("option").first().val();
-      if (tmpName) {
-        tmpName = tmpName.replace("-1_","");
-      }
+      tmpName = $(this).prev().text().trim();
       tmpIndex = $(this).attr("id");
       propertyHash = {name:tmpName,data:tmpProperties,id:tmpIndex};
       properties.push(propertyHash);

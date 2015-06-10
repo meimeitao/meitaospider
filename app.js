@@ -30,9 +30,10 @@ app.use(app.router);
 
 //TODO
 var bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: true });
+app.use(jsonParser);
+app.use(urlencodedParser);
 
 app.get('/', function(req, res){
   res.render('index');
@@ -113,11 +114,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
   });
 });
 
-app.post('/salesPropertiesStocks', function(req, res) {
-  console.log(req.body);
-  return false;
-  var url = req.query.url;
-  var stocks = req.query.stocks;
+app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
+  var url = req.body.url;
+  var stocks = req.body.stocks;
   var parser = "";
   var body = "";
 
