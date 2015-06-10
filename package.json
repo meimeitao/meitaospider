@@ -11,7 +11,8 @@
     "request"  : ">=2.36.0",
     "urls":"",
     "log4js":"",
-    "body-parser":""
+    "body-parser":"",
+    "cartesian-product" : ""
   },
   "repository" : {
     "type" : "git",
