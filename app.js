@@ -28,6 +28,12 @@ app.set('views', __dirname);
 app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}));
 app.use(app.router);
 
+//TODO
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get('/', function(req, res){
   res.render('index');
 });
@@ -63,6 +69,85 @@ app.get('/post', function(req, res){
     res.send(j);
   });
 
+});
+
+app.get('/salesPropertiesCrawler', function(req, res){
+  var url = req.query.url;
+  var parser = '';
+  var body = '';
+
+  pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
+
+  pt.stdout.on('data', function (data) {
+    body += data;
+  });
+
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  pt.on('close', function (code) {
+    var $ = cheerio.load(body);
+    var hostname = urls.parse(url).hostname;
+    switch(hostname) {
+      case "www.6pm.com":
+        parser = './parser/6pm.js';
+        break;
+      case "localhost":
+        parser = './parser/6pm.js';
+        break;
+      default:
+        console.log("parser not found "+url);
+        res.set('Content-Type', 'application/json');
+        res.send('{}');
+        break;
+    }
+    if(parser != ""){
+      var Parser = require(parser);
+      var p = new Parser($);
+      var j = p.getJSON();
+
+      res.set('Content-Type', 'application/json');
+      res.send(j);
+    }
+  });
+});
+
+app.post('/salesPropertiesStocks', function(req, res) {
+  console.log(req.body);
+  return false;
+  var url = req.query.url;
+  var stocks = req.query.stocks;
+  var parser = "";
+  var body = "";
+
+  var hostname = urls.parse(url).hostname;
+  switch (hostname) {
+    case "www.6pm.com":
+      parser = './pageAutomation/6pm.js'
+      break
+    default:
+      console.log("parser not found "+url);
+      res.set('Content-Type', 'application/json');
+      res.send('{}');
+      break;
+  }
+  if (!parser) return false;
+
+  pt = spawn('casperjs', [parser, url, stocks]);
+
+  pt.stdout.on('data', function (data) {
+    body += data;
+  });
+
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  pt.on('close', function (code) {
+    res.set('Content-Type', 'application/json');
+    res.send(body);
+  });
 });
 
 app.get('/crawler', function(req, res) {
@@ -153,11 +238,9 @@ app.get('/fetch', function(req, res){
   });
 
   pt.on('close', function (code) {
-    //console.log(body);
     var $ = cheerio.load(body);
     parser = '';
     hostname = urls.parse(url).hostname;
-    console.log(hostname);
     switch(hostname){
       case "item.taobao.com":
         parser = './parser/taobao.js';

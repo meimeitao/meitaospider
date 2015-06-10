@@ -10,7 +10,8 @@
     "cheerio"  : ">=0.16.0",
     "request"  : ">=2.36.0",
     "urls":"",
-    "log4js":""
+    "log4js":"",
+    "body-parser":""
   },
   "repository" : {
     "type" : "git",
