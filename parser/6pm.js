@@ -10,7 +10,11 @@ module.exports = function($) {
       $(this).children("option").each(function() {
         tmpVal = $(this).val();
         if (tmpVal.indexOf("-1_") == -1) {
-          tmpProperties[tmpVal] = $(this).text();
+          tmpProperties[tmpVal] = {
+            desc: $(this).text()
+            , demo: ""
+            , sample: ""
+          }
           tmpPropertiesArray.push(tmpVal);
         }
       });

@@ -169,6 +169,8 @@ app.get('/crawler', function(req, res) {
     hostname = urls.parse(url).hostname;
     if (hostname.indexOf("mashort.cn") > -1) {
       parser = './parser/mashort.js';
+    } else if (hostname.indexOf("baron.laiwang.com") > -1) {
+      parser = './parser/laiwang.js';
     } else {
       switch(hostname) {
         case "tb.cn":
