@@ -17,7 +17,7 @@ var stockMapping = JSON.parse(args[1]);
 
 casper.start(url);
 casper.then(function(term) {
-  var tmpStock, stockValue, tmpTarget;
+  var tmpStock, stockValue, tmpTarget, mapping = [];
   for (var x in stockMapping) {
     tmpStock = stockMapping[x];
     for (var m in tmpStock) {
@@ -43,9 +43,12 @@ casper.then(function(term) {
     stockValue = this.evaluate(function getStockStatus() {
       return document.querySelector("#addToCart").getAttribute("disabled");
     });
-    stockMapping[x].soldout = stockValue == 'disabled' ? 1 : 0;
+    if (stockValue == 'disabled') {
+      stockMapping[x].soldout = 1;
+      mapping.push(stockMapping[x]);
+    }
   }
-  utils.dump(stockMapping);
+  utils.dump(mapping);
 });
 
 casper.run(function() {

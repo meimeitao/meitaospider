@@ -37,7 +37,7 @@ module.exports = function($) {
         var selector = properties[y].id;
         tmpStock[selector] = selectValue;
       }
-      tmpStock['soldout'] = 0;
+      tmpStock['soldout'] = 1;
       stocks.push(tmpStock);
     }
     
