@@ -2,7 +2,9 @@ module.exports = function($) {
   this.$ = $;
   this.getJSON = function() {
   	var obj = {};
-    var detailContainer = $(".col-md-12").first().find("tr");
+    var detailTag = $(".col-md-12 h4:contains('Shipment Details')").first();
+    var detailContainer = detailTag.parent().find("tr");
+    //var detailContainer = $(".col-md-12").first().find("tr");
     var detail = {};
     var key,value;
     detailContainer.each(function() {
@@ -23,7 +25,17 @@ module.exports = function($) {
       });
     });
     var shipment = [];
-    var shipmentContainer = $(".col-md-12").eq(1).find("tr");
+    var shipmentHistoryTag = $(".col-md-12 h4:contains('Shipment History')").first();
+    //var shipmentHistoryTag;
+    //$("h4").each(function() {
+    //  console.log($(this).text().trim());
+    //  if ($(this).text().trim() == 'Shipment History') {
+    //    console.log("hitted");
+    //    shipmentHistoryTag = $(this);
+    //  }
+    //});
+    var shipmentContainer = shipmentHistoryTag.parent().find("tr");
+    //var shipmentContainer = $(".container.visible-md .col-md-12").eq(1).find("tr");
     shipmentContainer.each(function(i,el) {
       if (i > 0) {
         shipment.push({
