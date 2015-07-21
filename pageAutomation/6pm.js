@@ -46,6 +46,9 @@ casper.then(function(term) {
     if (stockValue == 'disabled') {
       stockMapping[x].soldout = 1;
       mapping.push(stockMapping[x]);
+    } else {
+      stockMapping[x].soldout = 0;
+      mapping.push(stockMapping[x]);
     }
   }
   utils.dump(mapping);
