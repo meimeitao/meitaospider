@@ -299,6 +299,15 @@ app.get('/fetch', function(req, res){
       case "mall.jumei.com":
         parser = './parser/jumeimall.js';
         break;
+      case "www.mybag.com":
+        parser = './parser/mybag.js';
+        break;
+      case "www.allsole.com":
+        parser = './parser/allsole.js';
+        break;
+      case "www.coggles.com":
+        parser = './parser/coggles.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
