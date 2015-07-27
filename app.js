@@ -308,6 +308,9 @@ app.get('/fetch', function(req, res){
       case "www.coggles.com":
         parser = './parser/coggles.js';
         break;
+      case "www.beautyexpert.com":
+        parser = './parser/beautyexpert.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
