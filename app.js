@@ -88,14 +88,15 @@ app.get('/salesPropertiesCrawler', function(req, res){
   });
 
   pt.on('close', function (code) {
+    console.log(body);
     var $ = cheerio.load(body);
     var hostname = urls.parse(url).hostname;
     switch(hostname) {
       case "www.6pm.com":
-        parser = './parser/6pm.js';
+        parser = './propertyParser/6pm.js';
         break;
-      case "localhost":
-        parser = './parser/6pm.js';
+      case "www.carters.com":
+        parser = './propertyParser/carters.js';
         break;
       default:
         console.log("parser not found "+url);
@@ -124,7 +125,10 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
   switch (hostname) {
     case "www.6pm.com":
       parser = './pageAutomation/6pm.js'
-      break
+      break;
+    case "www.carters.com":
+      parser = './pageAutomation/carters.js'
+      break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
@@ -310,6 +314,12 @@ app.get('/fetch', function(req, res){
         break;
       case "www.beautyexpert.com":
         parser = './parser/beautyexpert.js';
+        break;
+      case "www.carters.com":
+        parser = './parser/carters.js';
+        break;
+      case "us.asos.com":
+        parse = './parser/asos.js';
         break;
       default:
         console.log("parser not found "+url);
