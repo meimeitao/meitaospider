@@ -43,7 +43,6 @@ module.exports = function($) {
     });
 
     var mappingArray = [], tmpMappingHash = {}, tmpRow;
-    var outOfStock = "Out of Stock";
     var stocks = [], tmpStock = {};
     mappingArray = cartesianProduct(propertiesArray);
     for (var x in mappingArray) {
