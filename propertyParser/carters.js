@@ -9,10 +9,29 @@ module.exports = function($) {
       tmpPropertiesArray = [];
       $(this).children(".value").children(".swatches").children("li").children("a.swatchanchor").each(function() {
         tmpVal = $(this).attr("title").trim();
+        //商品样图
+        var demoJson = {}, demoStr = '';
+        var demoJsonStr = $(this).attr("data-lgimg");
+        if (demoJsonStr) {
+          demoJson = demoJsonStr.match(/"url":"(.*)",/);
+          if (demoJson[1]) {
+            demoStr = demoJson[1];
+          }
+        }
+
+        //商品样本
+        var sampleJson = {}, sampleStr = '';
+        var sampleJsonStr = $(this).attr("style");
+        if (sampleJsonStr) {
+          sampleJson = sampleJsonStr.match(/url\((.*)\)/);
+          if (sampleJson[1]) {
+            sampleStr = sampleJson[1];
+          }
+        }
         tmpProperties[tmpVal] = {
           desc: $(this).text().trim()
-          , demo: ""
-          , sample: ""
+          , demo: demoStr
+          , sample: sampleStr
         }
         tmpPropertiesArray.push(tmpVal);
       });
