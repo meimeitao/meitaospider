@@ -97,6 +97,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.carters.com":
         parser = './propertyParser/carters.js';
         break;
+      case "www.ralphlauren.com":
+        parser = './propertyParser/ralphlauren.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
@@ -128,6 +131,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
     case "www.carters.com":
       parser = './pageAutomation/carters.js';
       break;
+    case "www.ralphlauren.com":
+        parser = './pageAutomation/ralphlauren.js';
+        break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
