@@ -106,6 +106,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.rebeccaminkoff.com":
         parser = './propertyParser/rebeccaminkoff.js';
         break;
+      case "us.asos.com":
+        parser = './propertyParser/asos.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
@@ -145,6 +148,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
       break;
     case "www.rebeccaminkoff.com":
       parser = './pageAutomation/rebeccaminkoff.js';
+      break;
+    case "us.asos.com":
+      parser = './pageAutomation/asos.js';
       break;
     default:
       console.log("parser not found "+url);
