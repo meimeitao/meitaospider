@@ -4,10 +4,10 @@ module.exports = function($) {
   this.$ = $;
   this.getJSON = function() {
   	var properties = [], tmpProperties = {}, tmpIndex, tmpVal, tmpName, propertyHash = {}, propertiesArray = [], tmpPropertiesArray = [];
-    this.$("section#color1").each(function() {
+    this.$("#priceWrapper0").each(function() {
       tmpProperties = {};
       tmpPropertiesArray = [];
-      $(this).children(".color-box").children("a").each(function() {
+      $(this).find(".color-box").children("a").each(function() {
         tmpVal = $(this).attr("id").trim();
         tmpProperties[tmpVal] = {
           desc: ""
@@ -17,7 +17,7 @@ module.exports = function($) {
         tmpPropertiesArray.push(tmpVal);
       });
       tmpName = "COLOR";
-      tmpIndex = "color1"
+      tmpIndex = $(this).attr("id").trim();
       propertyHash = {name:tmpName,data:tmpProperties,id:tmpIndex};
       properties.push(propertyHash);
       propertiesArray.push(tmpPropertiesArray);

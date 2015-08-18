@@ -27,7 +27,7 @@ casper.then(function() {
         var evt = document.createEvent('CustomEvent');
         evt.initCustomEvent('click', true, false);
         var ele;
-        if (id == "color1") {
+        if (id.indexOf("color") > -1 || id.indexOf("priceWrapper0") > -1) {
           ele = document.querySelector("#"+id+" .color-box[data-color='"+value+"']");
         } else if (id == "sizes0") {
           ele = document.querySelector("#"+id+" .size-box[data-size='"+value+"']");

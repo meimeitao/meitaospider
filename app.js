@@ -101,6 +101,7 @@ app.get('/salesPropertiesCrawler', function(req, res){
         parser = './propertyParser/ralphlauren.js';
         break;
       case "factory.jcrew.com":
+      case "www.jcrew.com":
         parser = './propertyParser/jcrew.js';
         break;
       case "www.rebeccaminkoff.com":
@@ -144,6 +145,7 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
       parser = './pageAutomation/ralphlauren.js';
       break;
     case "factory.jcrew.com":
+    case "www.jcrew.com":
       parser = './pageAutomation/jcrew.js';
       break;
     case "www.rebeccaminkoff.com":
