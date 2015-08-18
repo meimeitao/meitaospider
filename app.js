@@ -103,6 +103,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "factory.jcrew.com":
         parser = './propertyParser/jcrew.js';
         break;
+      case "www.rebeccaminkoff.com":
+        parser = './propertyParser/rebeccaminkoff.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
@@ -139,6 +142,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
       break;
     case "factory.jcrew.com":
       parser = './pageAutomation/jcrew.js';
+      break;
+    case "www.rebeccaminkoff.com":
+      parser = './pageAutomation/rebeccaminkoff.js';
       break;
     default:
       console.log("parser not found "+url);

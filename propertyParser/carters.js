@@ -14,7 +14,7 @@ module.exports = function($) {
         var demoJsonStr = $(this).attr("data-lgimg");
         if (demoJsonStr) {
           demoJson = demoJsonStr.match(/"url":"(.*)",/);
-          if (demoJson[1]) {
+          if (demoJson && demoJson[1]) {
             demoStr = demoJson[1];
           }
         }
@@ -24,7 +24,7 @@ module.exports = function($) {
         var sampleJsonStr = $(this).attr("style");
         if (sampleJsonStr) {
           sampleJson = sampleJsonStr.match(/url\((.*)\)/);
-          if (sampleJson[1]) {
+          if (sampleJson && sampleJson[1]) {
             sampleStr = sampleJson[1];
           }
         }
