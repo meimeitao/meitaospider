@@ -110,6 +110,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "us.asos.com":
         parser = './propertyParser/asos.js';
         break;
+      //case "www.katespade.com":
+      //  parser = './propertyParser/katespade.js';
+      //  break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
@@ -154,6 +157,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
     case "us.asos.com":
       parser = './pageAutomation/asos.js';
       break;
+    //case "www.katespade.com":
+    //  parser = './pageAutomation/katespade.js';
+    //  break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');

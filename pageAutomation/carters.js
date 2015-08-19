@@ -6,9 +6,6 @@ var args = casper.cli.args;
 var url = args[0];
 var stockMapping = JSON.parse(args[1]);
 
-//var url = "http://www.carters.com/carters-baby-baby-boy-accessories-shoes-and-slippers/V_CWS14-202G.html?dwvar_V__CWS14-202G_size=3&dwvar_V__CWS14-202G_color=Color#navID=header&start=27&cgid=carters-baby-baby-boy-accessories-shoes-and-slippers"
-//var stockMapping = JSON.parse('[{"size":"3.5","color":"Color","soldout":1},{"size":"4","color":"Color","soldout":1},{"size":"4.5","color":"Color","soldout":1},{"size":"5","color":"Color","soldout":1},{"size":"3","color":"Color","soldout":1}]');
-
 //casper.on("remote.message", function(message) {
 //  this.echo("remote console.log: " + message);
 //});
@@ -65,7 +62,7 @@ function stockSoldout(stocks, url, isSoldout) {
   return stocks;
 }
 
-uri = parseUrl(url);
+var uri = parseUrl(url);
 var searchTemplate = serialize(uri.search);
 
 var stockUrls = [];
@@ -88,7 +85,7 @@ for (var x in stockMapping) {
 var i = 0;
 casper.start().each(stockUrls, function(self, link) {
   self.thenOpen(link, function() {
-    this.capture('../runtime/screenshot_'+ i +'.png');
+    //this.capture('../runtime/screenshot_'+ i +'.png');
     ++i;
     var notAvailable = this.evaluate(function() {
       return document.querySelector(".not-available-msg");
