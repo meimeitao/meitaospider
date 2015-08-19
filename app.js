@@ -113,6 +113,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.topshop.com":
         parser = './propertyParser/topshop.js';
         break;
+      case "www.gilt.com":
+        parser = './propertyParser/gilt.js';
+        break;
       //case "www.katespade.com":
       //  parser = './propertyParser/katespade.js';
       //  break;
@@ -162,6 +165,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
       break;
     case "www.topshop.com":
       parser = './pageAutomation/topshop.js';
+      break;
+    case "www.gilt.com":
+      parser = './pageAutomation/gilt.js';
       break;
     //case "www.katespade.com":
     //  parser = './pageAutomation/katespade.js';
