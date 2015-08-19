@@ -110,6 +110,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "us.asos.com":
         parser = './propertyParser/asos.js';
         break;
+      case "www.topshop.com":
+        parser = './propertyParser/topshop.js';
+        break;
       //case "www.katespade.com":
       //  parser = './propertyParser/katespade.js';
       //  break;
@@ -156,6 +159,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
       break;
     case "us.asos.com":
       parser = './pageAutomation/asos.js';
+      break;
+    case "www.topshop.com":
+      parser = './pageAutomation/topshop.js';
       break;
     //case "www.katespade.com":
     //  parser = './pageAutomation/katespade.js';
