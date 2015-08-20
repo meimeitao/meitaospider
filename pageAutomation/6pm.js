@@ -19,6 +19,7 @@ casper.start(url);
 
 casper.then(function() {
   var properties = [], stocks = [], propertiesAry = [], propertiesMapping = {}, retData = {};
+  var primitivePriceCurrency = "USD";
 
   var colorNames = this.evaluate(function() {
     return colorNames;
@@ -37,7 +38,7 @@ casper.then(function() {
   });
 
   var propertyColor = {};
-  propertyColor['name'] = "Color";
+  propertyColor['name'] = "color";
   propertyColor['id'] = "color";
   propertyColor['data'] = {};
   var colorProperties = [];
@@ -51,7 +52,7 @@ casper.then(function() {
       , demo: tmpDemo
       , sample: tmpSample
       , primitive_price: colorPrices[x]['nowInt']
-      , primitive_price_currency: "USD"
+      , primitive_price_currency: primitivePriceCurrency
       , exID: x
     }
     colorProperties.push(x);
@@ -99,7 +100,7 @@ casper.then(function() {
         , demo: ""
         , sample: ""
         , primitive_price: 0
-        , primitive_price_currency: "USD"
+        , primitive_price_currency: primitivePriceCurrency
         , exID: tmpDimensionVal
       };
 
