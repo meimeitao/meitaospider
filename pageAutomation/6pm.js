@@ -121,7 +121,7 @@ casper.then(function() {
     var tmpStockJSON = stockJSON[x];
     var tmpIndex = [];
     for (var m in tmpStockJSON) {
-      if (m == 'id' || m == 'onHand') continue;
+      if (m == 'id' || m == 'onHand' || m == 'isAvailable' || m == 'isPartial') continue;
       tmpIndex.push(m);
       tmpIndex.push(tmpStockJSON[m]);
     }
