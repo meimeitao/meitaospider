@@ -1,60 +1,162 @@
-var casper = require('casper').create({
-  //clientScripts: ["/Users/Dya/Projects/meitaosite/public/javascripts/jquery-1.9.0.min.js"]
-});
+var casper = require('casper').create();
 var utils = require("utils");
 var system = require('system');
+var cartesianProduct = require('cartesian-product');
+
 var args = casper.cli.args;
+
 var url = args[0];
-var stockMapping = JSON.parse(args[1]);
 
 //casper.on("remote.message", function(message) {
 //  this.echo("remote console.log: " + message);
 //});
-//
+
 //casper.on('page.error', function (msg, trace) {
 //    this.echo( 'Error: ' + msg, 'ERROR' );
 //});
 
 casper.start(url);
-casper.then(function(term) {
-  var tmpStock, stockValue, tmpTarget, mapping = [];
-  for (var x in stockMapping) {
-    tmpStock = stockMapping[x];
-    for (var m in tmpStock) {
-      if (m == 'soldout') continue;
-      tmpTarget = tmpStock[m];
-      this.evaluate(function setProperties(id, value) {
-        var evt = document.createEvent('CustomEvent');
-        evt.initCustomEvent('change', true, false);
-        var ele = document.getElementById(id);
-        var opts = ele.options;
-        var selectedIndex;
-        for (var optIndex in opts) {
-          if (opts[optIndex].value == value) {
-            selectedIndex = opts[optIndex].index;
-            break;
-          }
-        }
-        ele.selectedIndex = selectedIndex;
-        ele.dispatchEvent(evt);
-      }, m, tmpTarget);
+
+casper.then(function() {
+  var properties = [], stocks = [], propertiesAry = [], propertiesMapping = {}, retData = {};
+
+  var colorNames = this.evaluate(function() {
+    return colorNames;
+  });
+
+  var pImgs = this.evaluate(function() {
+    return pImgs;
+  });
+
+  var styleIds = this.evaluate(function() {
+    return styleIds;
+  });
+
+  var colorPrices = this.evaluate(function() {
+    return colorPrices;
+  });
+
+  var propertyColor = {};
+  propertyColor['name'] = "Color";
+  propertyColor['id'] = "color";
+  propertyColor['data'] = {};
+  var colorProperties = [];
+  for (var x in colorNames) {
+    var tmpColorName = colorNames[x];
+    var tmpStyleId = styleIds[x];
+    var tmpDemo = pImgs[tmpStyleId]['MULTIVIEW']['p'];
+    var tmpSample = pImgs[tmpStyleId]['MULTIVIEW']['p'].replace("p-MULTIVIEW", "8-SWATCH");
+    var tmpColorObject = {
+      desc: tmpColorName
+      , demo: tmpDemo
+      , sample: tmpSample
+      , primitive_price: colorPrices[x]['nowInt']
+      , primitive_price_currency: "USD"
+      , exID: x
     }
-    //this.capture('runtime/screenshot_'+x+'.png');
-    stockValue = this.evaluate(function getStockStatus() {
-      return document.querySelector("#addToCart").getAttribute("disabled");
-    });
-    if (stockValue == 'disabled') {
-      stockMapping[x].soldout = 1;
-      mapping.push(stockMapping[x]);
-    } else {
-      stockMapping[x].soldout = 0;
-      mapping.push(stockMapping[x]);
-    }
+    colorProperties.push(x);
+    propertyColor['data'][x] = tmpColorObject;
+    propertiesMapping[x] = 'color';
   }
-  utils.dump(mapping);
+
+  propertiesAry.push(colorProperties);
+  properties.push(propertyColor);
+
+  var dimensions = this.evaluate(function() {
+    return dimensions;
+  });
+
+  var dimToUnitToValJSON = this.evaluate(function() {
+    return dimToUnitToValJSON;
+  });
+
+  var dimensionIdToNameJson = this.evaluate(function() {
+    return dimensionIdToNameJson;
+  });
+
+  var valueIdToNameJSON = this.evaluate(function() {
+    return valueIdToNameJSON;
+  });
+
+  for (var x in dimensions) {
+    var tmpDimension = dimensions[x];
+    var tmpProperty = {};
+
+    var tmpDimensionVals = [];
+    for (var m in dimToUnitToValJSON[tmpDimension]) {
+      tmpDimensionVals = dimToUnitToValJSON[tmpDimension][m];
+    }
+    var tmpDimensionName = dimensionIdToNameJson[tmpDimension];
+    tmpProperty['name'] = tmpDimensionName;
+    tmpProperty['id'] = tmpDimension;
+    tmpProperty['data'] = {};
+
+    var tmpProperties = [];
+    for (var n in tmpDimensionVals) {
+      var tmpDimensionVal = tmpDimensionVals[n];
+      var tmpDimensionObject = {
+        desc: valueIdToNameJSON[tmpDimensionVal]["value"]
+        , demo: ""
+        , sample: ""
+        , primitive_price: 0
+        , primitive_price_currency: "USD"
+        , exID: tmpDimensionVal
+      };
+
+      tmpProperty['data'][tmpDimensionVal] = tmpDimensionObject;
+      tmpProperties.push(tmpDimensionVal);
+      propertiesMapping[tmpDimensionVal] = tmpDimension;
+    }
+
+    propertiesAry.push(tmpProperties);
+    properties.push(tmpProperty);
+  }
+
+  var stockJSON = this.evaluate(function() {
+    return stockJSON;
+  });
+
+  var flatStockJSON = {};
+  for (var x in stockJSON) {
+    var tmpStockJSON = stockJSON[x];
+    var tmpIndex = [];
+    for (var m in tmpStockJSON) {
+      if (m == 'id' || m == 'onHand') continue;
+      tmpIndex.push(m);
+      tmpIndex.push(tmpStockJSON[m]);
+    }
+    var tmpIndexStr = tmpIndex.join("_");
+    flatStockJSON[tmpIndexStr] = tmpStockJSON["onHand"] > 0 ? 0 : 1;
+  }
+
+  var stockCartesianPrd = cartesianProduct(propertiesAry);
+
+  for (var x in stockCartesianPrd) {
+    var tmpRow = stockCartesianPrd[x];
+    var tmpStock = {};
+    var soldoutFlag = 1;
+    var tmpIndex = [];
+    for (var y in tmpRow) {
+      var selectValue = tmpRow[y];
+      var selector = propertiesMapping[selectValue];
+      tmpStock[selector] = String(selectValue);
+      tmpIndex.push(selector);
+      tmpIndex.push(selectValue);
+    }
+    var tmpIndexStr = tmpIndex.join("_");
+    tmpStock['soldout'] = flatStockJSON[tmpIndexStr] == 0 ? 0 : 1;
+    stocks.push(tmpStock);
+  }
+
+  retData = {
+    "properties": properties
+    , "stocks": stocks
+  };
+
+  utils.dump(retData);
+
 });
 
 casper.run(function() {
-    //this.debugPage();
     this.exit();
 });

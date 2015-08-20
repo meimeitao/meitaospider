@@ -91,9 +91,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
     var $ = cheerio.load(body);
     var hostname = urls.parse(url).hostname;
     switch(hostname) {
-      case "www.6pm.com":
-        parser = './propertyParser/6pm.js';
-        break;
       case "www.carters.com":
         parser = './propertyParser/carters.js';
         break;
@@ -116,9 +113,9 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.gilt.com":
         parser = './propertyParser/gilt.js';
         break;
-      case "www.victoriassecret.com":
-        parser = './propertyParser/victoriassecret.js';
-        break;
+      //case "www.victoriassecret.com":
+      //  parser = './propertyParser/victoriassecret.js';
+      //  break;
       //case "www.katespade.com":
       //  parser = './propertyParser/katespade.js';
       //  break;
@@ -147,9 +144,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
 
   var hostname = urls.parse(url).hostname;
   switch (hostname) {
-    case "www.6pm.com":
-      parser = './pageAutomation/6pm.js';
-      break;
     case "www.carters.com":
       parser = './pageAutomation/carters.js';
       break;
@@ -172,9 +166,9 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
     case "www.gilt.com":
       parser = './pageAutomation/gilt.js';
       break;
-    case "www.victoriassecret.com":
-      parser = './pageAutomation/victoriassecret.js';
-      break;
+    //case "www.victoriassecret.com":
+    //  parser = './pageAutomation/victoriassecret.js';
+    //  break;
     //case "www.katespade.com":
     //  parser = './pageAutomation/katespade.js';
     //  break;
@@ -187,6 +181,41 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
   if (!parser) return false;
 
   pt = spawn('casperjs', [parser, url, stocks]);
+
+  pt.stdout.on('data', function (data) {
+    body += data;
+  });
+
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  pt.on('close', function (code) {
+    res.set('Content-Type', 'application/json');
+    res.send(body);
+  });
+});
+
+//商品属性|属性价格|属性库存|属性样图|属性样本
+app.post('/salesProperties', urlencodedParser, function(req, res) {
+  var url = req.body.url;
+  var parser = "";
+  var body = "";
+
+  var hostname = urls.parse(url).hostname;
+  switch (hostname) {
+    case "www.6pm.com":
+      parser = './pageAutomation/6pm.js';
+      break;
+    default:
+      console.log("parser not found "+url);
+      res.set('Content-Type', 'application/json');
+      res.send('{}');
+      break;
+  }
+  if (!parser) return false;
+
+  pt = spawn('casperjs', [parser, url]);
 
   pt.stdout.on('data', function (data) {
     body += data;
