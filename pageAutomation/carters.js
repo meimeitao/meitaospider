@@ -62,6 +62,10 @@ function stockSoldout(stocks, url, isSoldout) {
   return stocks;
 }
 
+function parseMoney(amount) {
+  return Number(amount.replace(/[^0-9\.]+/g,""));
+}
+
 var properties = [], stocks = [], propertiesAry = [], propertiesMapping = {}, retData = {};
 
 casper.start(url);
@@ -170,16 +174,43 @@ casper.then(function() {
     
     stockUrls.push(uri.href);
   }
-
+  
   var i = 0;
   this.start().each(stockUrls, function(self, link) {
     self.thenOpen(link, function() {
       ++i;
       var notAvailable = this.evaluate(function() {
-        return document.querySelector(".not-available-msg");
+        var current = document.querySelector(".product-variations").dataset.current;
+        var currentJSON = JSON.parse(current);
+        for (var x in currentJSON) {
+          var ele = document.querySelector(".swatchanchor[title='"+currentJSON[x]["value"]+"']");
+          if (ele.parentNode.className.indexOf("unselectable") > -1) {
+            return true;
+          }
+        }
+        return false;
       });
       var isSoldout = notAvailable ? 1 : 0;
       stocks = stockSoldout(stocks, link, isSoldout);
+
+      var currentPrice = this.evaluate(function() {
+        return document.querySelector(".price-sales[itemprop=price]").innerText;
+      });
+
+      var currentColor = this.evaluate(function() {
+        var current = document.querySelector(".product-variations").dataset.current;
+        var currentJSON = JSON.parse(current);
+        return currentJSON["color"];
+      });
+
+      for (var x in properties) {
+        if (properties[x]["id"] != 'color') continue;
+        for (var m in properties[x]["data"]) {
+          if (m == currentColor["value"]) {
+            properties[x]["data"][m]["primitive_price"] = parseMoney(currentPrice);
+          }
+        }
+      }
     });
   });
 
