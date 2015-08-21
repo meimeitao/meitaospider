@@ -91,9 +91,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
     var $ = cheerio.load(body);
     var hostname = urls.parse(url).hostname;
     switch(hostname) {
-      case "www.carters.com":
-        parser = './propertyParser/carters.js';
-        break;
       case "www.ralphlauren.com":
         parser = './propertyParser/ralphlauren.js';
         break;
@@ -144,9 +141,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
 
   var hostname = urls.parse(url).hostname;
   switch (hostname) {
-    case "www.carters.com":
-      parser = './pageAutomation/carters.js';
-      break;
     case "www.ralphlauren.com":
       parser = './pageAutomation/ralphlauren.js';
       break;
@@ -206,6 +200,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   switch (hostname) {
     case "www.6pm.com":
       parser = './pageAutomation/6pm.js';
+      break;
+    case "www.carters.com":
+      parser = './pageAutomation/carters.js';
       break;
     default:
       console.log("parser not found "+url);

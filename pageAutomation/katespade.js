@@ -3,11 +3,8 @@ var utils = require("utils");
 var system = require('system');
 var args = casper.cli.args;
 
-//var url = args[0];
-//var stockMapping = JSON.parse(args[1]);
-
-var url = "https://www.katespade.com/flirty-back-mini-dress/NJMU5252,en_US,pd.html";
-var stockMapping = JSON.parse('[{"SIZE:":"00","COLOR:":"001","soldout":1},{"SIZE:":"00","COLOR:":"627","soldout":1},{"SIZE:":"00","COLOR:":"937","soldout":1},{"SIZE:":"0","COLOR:":"001","soldout":1},{"SIZE:":"0","COLOR:":"627","soldout":1},{"SIZE:":"0","COLOR:":"937","soldout":1},{"SIZE:":"2","COLOR:":"001","soldout":1},{"SIZE:":"2","COLOR:":"627","soldout":1},{"SIZE:":"2","COLOR:":"937","soldout":1},{"SIZE:":"4","COLOR:":"001","soldout":1},{"SIZE:":"4","COLOR:":"627","soldout":1},{"SIZE:":"4","COLOR:":"937","soldout":1},{"SIZE:":"6","COLOR:":"001","soldout":1},{"SIZE:":"6","COLOR:":"627","soldout":1},{"SIZE:":"6","COLOR:":"937","soldout":1},{"SIZE:":"8","COLOR:":"001","soldout":1},{"SIZE:":"8","COLOR:":"627","soldout":1},{"SIZE:":"8","COLOR:":"937","soldout":1},{"SIZE:":"10","COLOR:":"001","soldout":1},{"SIZE:":"10","COLOR:":"627","soldout":1},{"SIZE:":"10","COLOR:":"937","soldout":1},{"SIZE:":"12","COLOR:":"001","soldout":1},{"SIZE:":"12","COLOR:":"627","soldout":1},{"SIZE:":"12","COLOR:":"937","soldout":1},{"SIZE:":"14","COLOR:":"001","soldout":1},{"SIZE:":"14","COLOR:":"627","soldout":1},{"SIZE:":"14","COLOR:":"937","soldout":1},{"SIZE:":"16","COLOR:":"001","soldout":1},{"SIZE:":"16","COLOR:":"627","soldout":1},{"SIZE:":"16","COLOR:":"937","soldout":1}]');
+var url = args[0];
+var stockMapping = JSON.parse(args[1]);
 
 //casper.on("remote.message", function(message) {
 //  this.echo("remote console.log: " + message);
