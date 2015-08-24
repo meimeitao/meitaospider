@@ -165,5 +165,7 @@ casper.then(function() {
 });
 
 casper.run(function() {
-    this.exit();
+  setTimeout(function() {
+    casper.exit();
+  }, 0);
 });
