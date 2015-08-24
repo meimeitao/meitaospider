@@ -94,10 +94,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.ralphlauren.com":
         parser = './propertyParser/ralphlauren.js';
         break;
-      case "factory.jcrew.com":
-      case "www.jcrew.com":
-        parser = './propertyParser/jcrew.js';
-        break;
       case "www.rebeccaminkoff.com":
         parser = './propertyParser/rebeccaminkoff.js';
         break;
@@ -143,10 +139,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
   switch (hostname) {
     case "www.ralphlauren.com":
       parser = './pageAutomation/ralphlauren.js';
-      break;
-    case "factory.jcrew.com":
-    case "www.jcrew.com":
-      parser = './pageAutomation/jcrew.js';
       break;
     case "www.rebeccaminkoff.com":
       parser = './pageAutomation/rebeccaminkoff.js';
@@ -203,6 +195,10 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
       break;
     case "www.carters.com":
       parser = './pageAutomation/carters.js';
+      break;
+    case "factory.jcrew.com":
+    case "www.jcrew.com":
+      parser = './pageAutomation/jcrew.js';
       break;
     default:
       console.log("parser not found "+url);

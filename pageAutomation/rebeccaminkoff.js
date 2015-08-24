@@ -1,4 +1,10 @@
-var casper = require('casper').create({});
+var casper = require('casper').create({
+  pageSettings: {
+    loadImages:  false,
+    loadPlugins: false
+  },
+  timeout: 300000 //MS 5mins
+});
 var utils = require("utils");
 var system = require('system');
 var args = casper.cli.args;
