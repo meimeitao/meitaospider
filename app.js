@@ -45,7 +45,7 @@ app.get('/post', function(req, res){
   var parser = '';
   var body = '';
 
-  pt = spawn('phantomjs', ['--load-images=false', 'phantompost.js', url, mytrakpaknumber]);
+  var pt = spawn('phantomjs', ['--load-images=false', 'phantompost.js', url, mytrakpaknumber]);
 
   pt.stdout.on('data', function (data) {
     body += data
@@ -77,7 +77,7 @@ app.get('/salesPropertiesCrawler', function(req, res){
   var parser = '';
   var body = '';
 
-  pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
+  var pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
 
   pt.stdout.on('data', function (data) {
     body += data;
@@ -91,9 +91,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
     var $ = cheerio.load(body);
     var hostname = urls.parse(url).hostname;
     switch(hostname) {
-      case "www.ralphlauren.com":
-        parser = './propertyParser/ralphlauren.js';
-        break;
       case "www.rebeccaminkoff.com":
         parser = './propertyParser/rebeccaminkoff.js';
         break;
@@ -137,9 +134,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
 
   var hostname = urls.parse(url).hostname;
   switch (hostname) {
-    case "www.ralphlauren.com":
-      parser = './pageAutomation/ralphlauren.js';
-      break;
     case "www.rebeccaminkoff.com":
       parser = './pageAutomation/rebeccaminkoff.js';
       break;
@@ -166,7 +160,7 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
   }
   if (!parser) return false;
 
-  pt = spawn('casperjs', [parser, url, stocks]);
+  var pt = spawn('casperjs', [parser, url, stocks]);
 
   pt.stdout.on('data', function (data) {
     body += data;
@@ -200,6 +194,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.jcrew.com":
       parser = './pageAutomation/jcrew.js';
       break;
+    case "www.ralphlauren.com":
+      parser = './pageAutomation/ralphlauren.js';
+      break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
@@ -208,7 +205,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   }
   if (!parser) return false;
 
-  pt = spawn('casperjs', [parser, url]);
+  var pt = spawn('casperjs', [parser, url, '--web-security=no']);
 
   pt.stdout.on('data', function (data) {
     body += data;
@@ -229,7 +226,7 @@ app.get('/crawler', function(req, res) {
   var parser = '';
   var body = '';
 
-  pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
+  var pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
 
   pt.stdout.on('data', function (data) {
     body += data
@@ -303,7 +300,7 @@ app.get('/fetch', function(req, res){
   var url = req.query.url
   var parser = '';
   var body = '';
-  pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
+  var pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
 
   pt.stdout.on('data', function (data) {
     body += data;
