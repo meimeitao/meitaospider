@@ -20,11 +20,12 @@ var url = args[0];
 //casper.on('page.error', function (msg, trace) {
 //    this.echo( 'Error: ' + msg, 'ERROR' );
 //});
+var retData = {};
 
 casper.start(url);
 
 casper.then(function() {
-  var properties = [], stocks = [], propertiesAry = [], propertiesMapping = {}, retData = {};
+  var properties = [], stocks = [], propertiesAry = [], propertiesMapping = {};
   var primitivePriceCurrency = "USD";
 
   var colorNames = this.evaluate(function() {
@@ -159,12 +160,10 @@ casper.then(function() {
     "properties": properties
     , "stocks": stocks
   };
-
-  utils.dump(retData);
-
 });
 
 casper.run(function() {
+  utils.dump(retData);
   setTimeout(function() {
     casper.exit();
   }, 0);
