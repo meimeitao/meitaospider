@@ -130,5 +130,7 @@ casper.then(function() {
 
 casper.run(function() {
   utils.dump(retData);
-  this.exit();
+  setTimeout(function() {
+    casper.exit();
+  }, 0);
 });
