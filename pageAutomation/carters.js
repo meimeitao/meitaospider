@@ -99,7 +99,6 @@ casper.then(function() {
       Array.prototype.map.call(tmpSwatchAnchors, function(tmpSwatchAnchor) {
         var tmpLgimg = tmpSwatchAnchor.dataset.lgimg, demo = "";
         if (tmpLgimg) {
-          console.log(tmpLgimg);
           try {
             var tmpLgimgJson = JSON.parse(tmpLgimg);
             demo = tmpLgimgJson["url"];

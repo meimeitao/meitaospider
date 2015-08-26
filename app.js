@@ -103,9 +103,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.gilt.com":
         parser = './propertyParser/gilt.js';
         break;
-      //case "www.victoriassecret.com":
-      //  parser = './propertyParser/victoriassecret.js';
-      //  break;
       //case "www.katespade.com":
       //  parser = './propertyParser/katespade.js';
       //  break;
@@ -146,9 +143,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
     case "www.gilt.com":
       parser = './pageAutomation/gilt.js';
       break;
-    //case "www.victoriassecret.com":
-    //  parser = './pageAutomation/victoriassecret.js';
-    //  break;
     //case "www.katespade.com":
     //  parser = './pageAutomation/katespade.js';
     //  break;
@@ -197,6 +191,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.ralphlauren.com":
       parser = './pageAutomation/ralphlauren.js';
       break;
+    case "www.victoriassecret.com":
+      parser = './pageAutomation/victoriassecret.js';
+      break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
@@ -205,7 +202,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   }
   if (!parser) return false;
 
-  var pt = spawn('casperjs', [parser, url, '--web-security=no']);
+  var pt = spawn('casperjs', ['--web-security=false', parser, url]);
 
   pt.stdout.on('data', function (data) {
     body += data;
