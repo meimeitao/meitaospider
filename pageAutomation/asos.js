@@ -10,7 +10,6 @@ var system = require('system');
 var args = casper.cli.args;
 
 var url = args[0];
-var stockMapping = JSON.parse(args[1]);
 
 //casper.on("remote.message", function(message) {
 //  this.echo("remote console.log: " + message);
@@ -20,40 +19,90 @@ var stockMapping = JSON.parse(args[1]);
 //    this.echo( 'Error: ' + msg, 'ERROR' );
 //});
 
+function parseMoney(amount) {
+  return Number(amount.replace(/[^0-9\.]+/g,""));
+}
+
+var retData = {};
+
 casper.start(url);
-casper.then(function(term) {
-  var tmpStock, stockValue, tmpTarget, mapping = [], notAvailable;
-  for (var x in stockMapping) {
-    tmpStock = stockMapping[x];
-    for (var m in tmpStock) {
-      if (m == 'soldout') continue;
-      tmpTarget = tmpStock[m];
-      notAvailable = this.evaluate(function setProperties(id, value) {
-        var ele = document.getElementById(id);
-        var opts = ele.options;
-        for (var optIndex in opts) {
-          if (opts[optIndex].value == value) {
-            if (opts[optIndex].text.indexOf("Not available") > -1) {
-              return true;
-            }
-          }
-        }
-        return false;
-      }, m, tmpTarget);
-    }
-    //this.capture('runtime/screenshot_'+x+'.png');
-    if (notAvailable) {
-      stockMapping[x].soldout = 1;
-      mapping.push(stockMapping[x]);
-    } else {
-      stockMapping[x].soldout = 0;
-      mapping.push(stockMapping[x]);
-    }
+
+casper.then(function() {
+  var properties = [], stocks = [];
+  var primitivePriceCurrency = "USD";
+  var colorID = "color";
+  var colorName = "color";
+  var sizeID = "size";
+  var sizeName = "size";
+
+  var productInfo = this.evaluate(function() {
+    return arrSzeCol_ctl00_ContentMainPage_ctlSeparateProduct;
+  });
+
+  var productImages = this.evaluate(function() {
+    return arrSepImage_ctl00_ContentMainPage_ctlSeparateProduct;
+  });
+
+  var productImagesIndexedByColor = {};
+  for (var x in productImages) {
+    var tmpImage = productImages[x];
+    productImagesIndexedByColor[tmpImage[3]] = tmpImage;
   }
-  utils.dump(mapping);
+
+  var color = {}, size = {};
+  color['name'] = colorName;
+  color['id'] = colorID;
+  color['data'] = {};
+  size['name'] = sizeName;
+  size['id'] = sizeID;
+  size['data'] = {};
+
+  for (var x in productInfo) {
+    var tmpItem = productInfo[x];
+    var tmpImage = productImagesIndexedByColor[tmpItem[2]];
+
+    var tmpColorObject = {
+      desc: tmpItem[2]
+      , demo: tmpImage ? tmpImage[0] : ""
+      , sample: ""
+      , primitive_price: parseMoney(tmpItem[5])
+      , primitive_price_currency: primitivePriceCurrency
+      , exID: tmpItem[2]
+    };
+
+    color["data"][tmpItem[2]] = tmpColorObject;
+
+    var tmpSizeObject = {
+      desc: tmpItem[1]
+      , demo: ""
+      , sample: ""
+      , primitive_price: parseMoney(tmpItem[5])
+      , primitive_price_currency: primitivePriceCurrency
+      , exID: tmpItem[1]
+    };
+
+    size["data"][tmpItem[1]] = tmpSizeObject;
+
+    tmpStockObj = {};
+    tmpStockObj[colorID] = tmpItem[2];
+    tmpStockObj[sizeID] = tmpItem[1];
+    tmpStockObj["soldout"] = tmpItem[3] == "True" ? 0 : 1;
+    stocks.push(tmpStockObj);
+  }
+
+  properties.push(color);
+  properties.push(size);
+
+  retData = {
+    "properties": properties
+    , "stocks": stocks
+  };
+  
 });
 
 casper.run(function() {
-    //this.debugPage();
-    this.exit();
+  utils.dump(retData);
+  setTimeout(function() {
+    casper.exit();
+  }, 0);
 });

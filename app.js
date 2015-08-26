@@ -94,9 +94,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.rebeccaminkoff.com":
         parser = './propertyParser/rebeccaminkoff.js';
         break;
-      case "us.asos.com":
-        parser = './propertyParser/asos.js';
-        break;
       case "www.topshop.com":
         parser = './propertyParser/topshop.js';
         break;
@@ -133,9 +130,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
   switch (hostname) {
     case "www.rebeccaminkoff.com":
       parser = './pageAutomation/rebeccaminkoff.js';
-      break;
-    case "us.asos.com":
-      parser = './pageAutomation/asos.js';
       break;
     case "www.topshop.com":
       parser = './pageAutomation/topshop.js';
@@ -193,6 +187,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
       break;
     case "www.victoriassecret.com":
       parser = './pageAutomation/victoriassecret.js';
+      break;
+    case "us.asos.com":
+      parser = './pageAutomation/asos.js';
       break;
     default:
       console.log("parser not found "+url);
