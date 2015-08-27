@@ -59,7 +59,7 @@ casper.then(function() {
 
   for (var x in productInfo) {
     var tmpItem = productInfo[x];
-    var tmpImage = productImagesIndexedByColor[tmpItem[2]];
+    var tmpImage = productImagesIndexedByColor[tmpItem[2].toLowerCase()];
 
     var tmpColorObject = {
       desc: tmpItem[2]
