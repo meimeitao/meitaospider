@@ -191,6 +191,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "us.asos.com":
       parser = './pageAutomation/asos.js';
       break;
+    case "www.stevemadden.com":
+      parser = './pageAutomation/stevemadden.js';
+      break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
