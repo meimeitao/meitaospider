@@ -111,7 +111,10 @@ casper.then(function() {
       }, m, tmpTarget);
     }
     stockValue = this.evaluate(function getStockStatus() {
-      return document.querySelector(".add-item").text;
+      while (true) {
+        var stockValue = document.querySelector(".add-item").text;
+        if (stockValue) return stockValue;
+      }
     });
     if (stockValue.toLowerCase() == 'out of stock') {
       stocks[x].soldout = 1;
