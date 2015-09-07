@@ -97,9 +97,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
       case "www.topshop.com":
         parser = './propertyParser/topshop.js';
         break;
-      case "www.gilt.com":
-        parser = './propertyParser/gilt.js';
-        break;
       //case "www.katespade.com":
       //  parser = './propertyParser/katespade.js';
       //  break;
@@ -133,9 +130,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
       break;
     case "www.topshop.com":
       parser = './pageAutomation/topshop.js';
-      break;
-    case "www.gilt.com":
-      parser = './pageAutomation/gilt.js';
       break;
     //case "www.katespade.com":
     //  parser = './pageAutomation/katespade.js';
@@ -193,6 +187,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
       break;
     case "www.stevemadden.com":
       parser = './pageAutomation/stevemadden.js';
+      break;
+    case "www.gilt.com":
+      parser = './pageAutomation/gilt.js';
       break;
     default:
       console.log("parser not found "+url);
