@@ -203,7 +203,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   }
   if (!parser) return false;
 
-  var pt = spawn('casperjs', [parser, url]);
+  var pt = spawn('casperjs', ["--ssl-protocol=any", parser, url]);
 
   pt.stdout.on('data', function (data) {
     body += data;

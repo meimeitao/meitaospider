@@ -25,7 +25,7 @@ var retData = {};
 casper.start(url);
 
 casper.then(function() {
-  var properties = [], stocks = [], propertiesMapping = {}, propertiesAry = [];
+  var properties = [], propertiesMapping = {}, propertiesAry = [];
   var primitivePriceCurrency = "USD";
 
   var twisterVariationsData = this.evaluate(function() {
