@@ -70,7 +70,7 @@ casper.then(function() {
 
       tmpDimension['data'][m] = tmpDimensionObject;
       tmpProperties.push(m);
-      propertiesMapping[m] = i;
+      propertiesMapping[m] = dimension;
     }
 
     propertiesAry.push(tmpProperties);

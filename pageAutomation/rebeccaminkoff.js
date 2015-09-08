@@ -1,16 +1,16 @@
 var casper = require('casper').create({
   pageSettings: {
     loadImages:  false,
-    loadPlugins: false
+    loadPlugins: false,
   },
   timeout: 300000 //MS 5mins
 });
 var utils = require("utils");
 var system = require('system');
 var args = casper.cli.args;
+var cartesianProduct = require('cartesian-product');
 
 var url = args[0];
-var stockMapping = JSON.parse(args[1]);
 
 //casper.on("remote.message", function(message) {
 //  this.echo("remote console.log: " + message);
@@ -23,9 +23,66 @@ var stockMapping = JSON.parse(args[1]);
 casper.start(url);
 
 casper.then(function() {
-  var tmpStock, stockValue, tmpTarget, mapping = [];
+  var properties = [], propertiesMapping = {}, propertiesAry = [];
+  var primitivePriceCurrency = "USD";
+
+  var attributes = this.evaluate(function() {
+    return spConfig.config.attributes;
+  });
+
+  for (var x in attributes) {
+    var attribute = attributes[x];
+
+    var tmpDimension = {};
+    tmpDimension['name'] = attribute.label;
+    tmpDimension['id'] = attribute.id;
+    tmpDimension['data'] = {};
+
+    var tmpOptions = attribute.options;
+    var tmpProperties = [];
+    for (var i = 0; i < tmpOptions.length; i++) {
+      var tmpOption = tmpOptions[i];
+
+      var tmpDemo = this.evaluate(function(title) {
+        var swatchImgEle = document.querySelector(".swatch-option[title='"+title+"']");
+        return swatchImgEle ? swatchImgEle.dataset.toggleImage : "";
+      }, tmpOption.label);
+
+      var tmpDimensionObject = {
+        desc: tmpOption.label.trim()
+        , demo: tmpDemo
+        , sample: tmpOption.swatch.img ? tmpOption.swatch.img : ""
+        , primitive_price: tmpOption.price
+        , primitive_price_currency: primitivePriceCurrency
+        , exID: tmpOption.id
+      };
+
+      tmpDimension['data'][tmpOption.id] = tmpDimensionObject;
+      tmpProperties.push(tmpOption.id);
+      propertiesMapping[tmpOption.id] = attribute.id;
+    }
+
+    propertiesAry.push(tmpProperties);
+    properties.push(tmpDimension);
+  }
+
+  var stocks = [];
+  var stockMapping = cartesianProduct(propertiesAry);
   for (var x in stockMapping) {
-    tmpStock = stockMapping[x];
+    var tmpRow = stockMapping[x];
+    var tmpStock = {};
+    for (var y in tmpRow) {
+      var selectValue = String(tmpRow[y]);
+      var selector = properties[y].id;
+      tmpStock[selector] = selectValue;
+    }
+    tmpStock['soldout'] = 1;
+    stocks.push(tmpStock);
+  }
+
+  var tmpStock, stockValue, tmpTarget;
+  for (var x in stocks) {
+    tmpStock = stocks[x];
     var propertyCount = 0;
     for (var m in tmpStock) {
       if (m == 'soldout') continue;
@@ -45,16 +102,19 @@ casper.then(function() {
       return document.querySelectorAll(".selected").length;
     });
     if (stockValue == propertyCount) {
-      stockMapping[x].soldout = 0;
-      mapping.push(stockMapping[x]);
+      stocks[x].soldout = 0;
     } else {
-      stockMapping[x].soldout = 1;
-      mapping.push(stockMapping[x]);
+      stocks[x].soldout = 1;
     }
   }
-  utils.dump(mapping);
+
+  retData = {
+    "properties": properties
+    , "stocks": stocks
+  };
 });
 
 casper.run(function() {
-    this.exit();
+  utils.dump(retData);
+  this.exit();
 });
