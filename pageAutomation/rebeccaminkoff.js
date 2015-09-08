@@ -43,10 +43,13 @@ casper.then(function() {
     for (var i = 0; i < tmpOptions.length; i++) {
       var tmpOption = tmpOptions[i];
 
-      var tmpDemo = this.evaluate(function(title) {
-        var swatchImgEle = document.querySelector(".swatch-option[title='"+title+"']");
-        return swatchImgEle ? swatchImgEle.dataset.toggleImage : "";
-      }, tmpOption.label);
+      var tmpDemo = "";
+      if (attribute.code == 'color') {
+        tmpDemo = this.evaluate(function(title) {
+          var swatchImgEle = document.querySelector(".swatch-option[title='"+title+"']");
+          return swatchImgEle ? swatchImgEle.dataset.toggleImage : "";
+        }, tmpOption.label);
+      }
 
       var tmpDimensionObject = {
         desc: tmpOption.label.trim()
