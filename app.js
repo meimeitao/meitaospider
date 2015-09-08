@@ -91,9 +91,6 @@ app.get('/salesPropertiesCrawler', function(req, res){
     var $ = cheerio.load(body);
     var hostname = urls.parse(url).hostname;
     switch(hostname) {
-      case "www.rebeccaminkoff.com":
-        parser = './propertyParser/rebeccaminkoff.js';
-        break;
       case "www.topshop.com":
         parser = './propertyParser/topshop.js';
         break;
@@ -125,9 +122,6 @@ app.post('/salesPropertiesStocks', urlencodedParser, function(req, res) {
 
   var hostname = urls.parse(url).hostname;
   switch (hostname) {
-    case "www.rebeccaminkoff.com":
-      parser = './pageAutomation/rebeccaminkoff.js';
-      break;
     case "www.topshop.com":
       parser = './pageAutomation/topshop.js';
       break;
@@ -194,6 +188,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.amazon.com":
     case "www.amazon.co.jp":
       parser = './pageAutomation/amazon.js';
+      break;
+    case "www.rebeccaminkoff.com":
+      parser = './pageAutomation/rebeccaminkoff.js';
       break;
     default:
       console.log("parser not found "+url);
