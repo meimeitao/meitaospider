@@ -191,6 +191,10 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.gilt.com":
       parser = './pageAutomation/gilt.js';
       break;
+    case "www.amazon.com":
+    case "www.amazon.co.jp":
+      parser = './pageAutomation/amazon.js';
+      break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
