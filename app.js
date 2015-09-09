@@ -155,6 +155,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   var hostname = urls.parse(url).hostname;
   switch (hostname) {
     case "www.6pm.com":
+    case "www.zappos.com":
       parser = './pageAutomation/6pm.js';
       break;
     case "www.carters.com":
@@ -189,6 +190,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.topshop.com":
       parser = './pageAutomation/topshop.js';
       break;
+    //case "www.ninewest.com":
+    //  parser = './pageAutomation/ninewest.js';
+    //  break;
     default:
       console.log("parser not found "+url);
       res.set('Content-Type', 'application/json');
