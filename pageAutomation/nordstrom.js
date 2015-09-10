@@ -135,7 +135,7 @@ casper.then(function() {
     var tmpRow = stockMapping[x];
     var tmpStock = {};
     for (var y in tmpRow) {
-      var selectValue = tmpRow[y];
+      var selectValue = String(tmpRow[y]);
       var selector = properties[y].id;
       tmpStock[selector] = selectValue;
     }
