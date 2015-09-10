@@ -190,6 +190,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.topshop.com":
       parser = './pageAutomation/topshop.js';
       break;
+    //case "www.myhabit.com":
+    //  parser = './pageAutomation/myhabit.js';
+    //  break;
     //case "www.ninewest.com":
     //  parser = './pageAutomation/ninewest.js';
     //  break;
