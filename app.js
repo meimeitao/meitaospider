@@ -196,6 +196,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.dsw.com":
       parser = './pageAutomation/dsw.js';
       break;
+    case "www.shoes.com":
+      parser = './pageAutomation/shoes.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
