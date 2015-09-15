@@ -202,6 +202,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.soludos.com":
       parser = './pageAutomation/soludos.js';
       break;
+    case "www.neimanmarcus.com":
+      parser = './pageAutomation/neimanmarcus.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;

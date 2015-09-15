@@ -144,10 +144,9 @@ casper.then(function() {
         }
       }, m, tmpTarget);
     }
-    this.capture('runtime/screenshot_'+x+'.png');
+    //this.capture('runtime/screenshot_'+x+'.png');
     stockValue = this.evaluate(function getStockStatus() {
       var stockStr = document.querySelector("#currentSize").innerText.toLowerCase();
-      console.log(stockStr);
       return stockStr.indexOf("is not available") > -1 ? false : true;
     });
     if (stockValue) {
