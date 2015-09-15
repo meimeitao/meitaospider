@@ -12,6 +12,14 @@ var cartesianProduct = require('cartesian-product');
 
 var url = args[0];
 
+//casper.on("remote.message", function(message) {
+//  this.echo("remote console.log: " + message);
+//});
+//
+//casper.on('page.error', function (msg, trace) {
+//  this.echo( 'Error: ' + msg, 'ERROR' );
+//});
+
 function parseMoney(amount) {
   return Number(amount.replace(/[^0-9\.]+/g,""));
 }
@@ -56,7 +64,8 @@ casper.then(function() {
       var properPrice = String(0);
       if (isColor) {
         properPrice = this.evaluate(function(pID) {
-          return document.querySelector("[data-color='"+pID+"']").parentNode.previousElementSibling.innerText.trim();
+          //return document.querySelector("[data-color='"+pID+"']").parentNode.previousElementSibling.innerText.trim();
+          return document.querySelector(".full-price span").innerText.trim();
         }, tmpPropertyIndex);
       }
 
