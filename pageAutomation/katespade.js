@@ -1,122 +1,174 @@
-var casper = require('casper').create({});
+var casper = require('casper').create({
+  pageSettings: {
+    loadImages:  false,
+    loadPlugins: false
+  },
+  timeout: 300000 //MS 5mins
+});
 var utils = require("utils");
 var system = require('system');
 var args = casper.cli.args;
+var cartesianProduct = require('cartesian-product');
 
 var url = args[0];
-var stockMapping = JSON.parse(args[1]);
 
-//casper.on("remote.message", function(message) {
-//  this.echo("remote console.log: " + message);
-//});
-//
-//casper.on('page.error', function (msg, trace) {
-//    this.echo( 'Error: ' + msg, 'ERROR' );
-//});
+casper.on("remote.message", function(message) {
+  this.echo("remote console.log: " + message);
+});
 
-function parseUrl(origin_url) {
-  var uri = document.createElement('a');
-  uri.href = origin_url;
-  return uri;
-}
+casper.on('page.error', function (msg, trace) {
+  this.echo( 'Error: ' + msg, 'ERROR' );
+});
 
-function serialize(str) {
-  var search = str.substring(1);
-  var searchTemplate = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}')
-  return searchTemplate;
-}
+var retData = {};
 
-function setTemplateAttribute(template,index,value) {
-  for (var x in template) {
-    if (x.indexOf(index.split(":")[0].toLowerCase()) > -1) {
-      template[x] = value;
-    }
-  }
-  return template;
-}
+casper.start(url, function() {
+  this.echo("Opening url: "+url);
+});
 
-function joinSearchTemplate(template) {
-  var str;
-  for (var x in template) {
-    if (str) {
-      str = str + "&" + x + "=" + template[x];
-    } else {
-      str = x + "=" + template[x];
-    }
-  }
-  return str;
-}
-
-function stockSoldout(stocks, url, isSoldout) {
-  for (var x in stocks) {
-    stock = stocks[x];
-    for (var m in stock) {
-      if (m == 'href') {
-        if (stock[m] == url) {
-          stocks[x]['soldout'] = isSoldout;
-          delete(stocks[x][m]);
-        }
-      }
-    }
-  }
-  return stocks;
-}
-
-var searchTemplate, uri, stockUrls = [];
-casper.start(url);
 casper.then(function() {
-  var tmpUrl = this.evaluate(function() {
-    var ele = document.querySelector(".swatchanchor");
-    return ele.href;
+  var properties = [], stocks = [], propertiesAry = [];
+
+  this.capture("runtime/main.png");
+
+  var retColor = this.evaluate(function() {
+    function parseMoney(amount) {
+      return amount ? (amount.replace(/[^0-9\.]+/g,"")) : 0;
+    }
+
+    var primitivePriceCurrency = "USD";
+    var colorID = "Color";
+    var colorName = "color";
+
+    console.log("."+colorID+" li");
+    var colorOptions = document.querySelectorAll("."+colorID+" li");
+    console.log(colorOptions.length);
+    var color = {};
+    color['name'] = colorName;
+    color['id'] = colorID;
+    color['data'] = {};
+
+    var colors = [];
+
+    for (var i = 0; i < colorOptions.length; i++) {
+      var tmpOption = colorOptions[i];
+      var tmpSwatchanchor = tmpOption.querySelector("a.swatchanchor");
+      var tmpSwatchImg = tmpSwatchanchor.querySelector("img");
+
+      var tmpDesc = tmpSwatchanchor.title;
+      var tmpSample = tmpOption.dataset.pimage;
+      var tmpDemo = tmpSwatchImg.src;
+      var tmpPrice = document.querySelector("span.price-sales").innerText.trim();
+      var tmpID = tmpOption.dataset.value;
+
+      var tmpObject = {
+        desc: tmpDesc
+        , demo: tmpDemo
+        , sample: tmpSample
+        , primitive_price: parseMoney(tmpPrice)
+        , primitive_price_currency: primitivePriceCurrency
+        , exID: tmpID
+      };
+
+      color['data'][tmpID] = tmpObject;
+      colors.push(tmpID);
+    }
+
+    return {color:color, colors:colors};
   });
 
-  utils.dump(tmpUrl);
-  var templateUrl = this.thenOpen(tmpUrl, function() {
-    return this.evaluate(function() {
-      var ele = document.querySelector(".swatchanchor");
-      return ele.href;
-    });
-  });
-  
-  utils.dump(templateUrl);
-  uri = parseUrl(templateUrl);
-  searchTemplate = serialize(uri.search);
+  var retSize = this.evaluate(function() {
+    var primitivePriceCurrency = "USD";
+    var sizeID = "size";
+    var sizeName = "size";
 
+    var sizeOptions = document.querySelectorAll("."+sizeID+" li a");
+
+    var size = {};
+    size['name'] = sizeName;
+    size['id'] = sizeID;
+    size['data'] = {};
+
+    var sizes = [];
+
+    for (var i = 0; i < sizeOptions.length; i++) {
+      var tmpOption = sizeOptions[i];
+
+      var tmpDesc = tmpOption.innerText;
+      var tmpSample = "", tmpDemo = "";
+      var tmpID = tmpOption.title;
+
+      var tmpObject = {
+        desc: tmpDesc
+        , demo: tmpDemo
+        , sample: tmpSample
+        , primitive_price: 0
+        , primitive_price_currency: primitivePriceCurrency
+        , exID: tmpID
+      };
+
+      size['data'][tmpID] = tmpObject;
+      sizes.push(tmpID);
+    }
+
+    return {size:size, sizes:sizes};
+  });
+
+  properties.push(retColor['color']);
+  propertiesAry.push(retColor['colors']);
+  if (retSize['size'].length > 0) {
+    properties.push(retSize['size']);
+    propertiesAry.push(retSize['sizes']);
+  }
+
+  var stockMapping = cartesianProduct(propertiesAry);
   for (var x in stockMapping) {
-    tmpStock = stockMapping[x];
+    var tmpRow = stockMapping[x];
+    var tmpStock = {};
+    for (var y in tmpRow) {
+      var selectValue = String(tmpRow[y]);
+      var selector = properties[y].id;
+      tmpStock[selector] = selectValue;
+    }
+    tmpStock['soldout'] = 1;
+    stocks.push(tmpStock);
+  }
+
+  var tmpStock, stockValue, tmpTarget;
+  for (var x in stocks) {
+    tmpStock = stocks[x];
+    var sizeID;
     for (var m in tmpStock) {
       if (m == 'soldout') continue;
       tmpTarget = tmpStock[m];
-      searchTemplate = setTemplateAttribute(searchTemplate,m,tmpTarget);
+      this.evaluate(function setProperties(id, value) {
+        if (id != 'Color') return false;
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent('click', true, false);
+        var ele = document.querySelector("."+id+" li[data-value='"+value+"']");
+        ele.dispatchEvent(evt);
+      }, m, tmpTarget);
+      if (m == 'size') sizeID = tmpTarget;
     }
-    var tmpSearch = "?" + joinSearchTemplate(searchTemplate)
-    uri.search = tmpSearch;
-  
-    stockMapping[x]['href'] = uri.href;
-    
-    stockUrls.push(uri.href);
+    this.capture('runtime/screenshot_'+x+'.png');
+    stockValue = this.evaluate(function getStockStatus(sizeID) {
+      var sizeSwatch = document.querySelector(".swatchanchor[title='"+sizeID+"']");
+      return sizeSwatch.parentNode.className.indexOf("unselectable") > -1 ? false : true;
+    }, sizeID);
+    if (stockValue) {
+      stocks[x].soldout = 0;
+    } else {
+      stocks[x].soldout = 1;
+    }
   }
-  utils.dump(stockUrls);
-});
 
-var i = 0;
-casper.then(function() {
-  utils.dump("each link start...");
-  this.each(stockUrls, function(self, link) {
-    utils.dump(link);
-    self.thenOpen(link, function() {
-      this.capture('../runtime/screenshot_'+ i +'.png');
-      ++i;
-      var notAvailable = this.evaluate(function() {
-        return document.querySelector(".not-available-msg");
-      });
-      var isSoldout = notAvailable ? 1 : 0;
-      stockMapping = stockSoldout(stockMapping, link, isSoldout);
-    });
-  });
+  retData = {
+    "properties": properties
+    , "stocks": stocks
+  };
 });
 
 casper.run(function() {
-  utils.dump(stockMapping);
+  utils.dump(retData);
   this.exit();
 });
