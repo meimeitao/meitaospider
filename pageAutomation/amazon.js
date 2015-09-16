@@ -24,6 +24,12 @@ var retData = {};
 
 casper.start(url);
 
+casper.waitFor(function check() {
+  return this.evaluate(function() {
+    return twisterController ? true :false;
+  });
+});
+
 casper.then(function() {
   var properties = [], propertiesMapping = {}, propertiesAry = [];
   var primitivePriceCurrency = "USD";
