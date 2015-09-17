@@ -21,7 +21,7 @@ var url = args[0];
 //});
 
 function parseMoney(amount) {
-  return Number(amount.replace(/[^0-9\.]+/g,""));
+  return amount ? (amount.replace(/[^0-9\.]+/g,"")) : 0;
 }
 
 var properties = [], stocks = [], propertiesAry = [], propertiesMapping = {}, retData = {};
