@@ -1,7 +1,7 @@
 var casper = require('casper').create({
   pageSettings: {
-    loadImages:  false,
-    loadPlugins: false
+      loadImages:  false,
+      loadPlugins: false,
   },
   timeout: 300000 //MS 5mins
 });
@@ -20,12 +20,10 @@ var url = args[0];
 //  this.echo( 'Error: ' + msg, 'ERROR' );
 //});
 
-var retData = {};
-
 casper.start(url);
 
 casper.then(function() {
-  var properties = [], propertiesAry = [];
+  var properties = [], propertiesMapping = {}, propertiesAry = [];
 
   var retColor = this.evaluate(function() {
     function parseMoney(amount) {
@@ -33,10 +31,11 @@ casper.then(function() {
     }
 
     var primitivePriceCurrency = "USD";
-    var colorID = "colorChips";
+    var colorID = "color-button-set";
     var colorName = "color";
 
-    var colorOptions = document.querySelectorAll("#"+colorID+" img[option-name='"+colorName+"']");
+    var colorOptions = document.querySelectorAll("."+colorID+" li");
+
     var color = {};
     color['name'] = colorName;
     color['id'] = colorID;
@@ -45,29 +44,31 @@ casper.then(function() {
     var colors = [];
 
     for (var i = 0; i < colorOptions.length; i++) {
-      var tmpColorOption = colorOptions[i];
+      var tmpOption = colorOptions[i];
 
-      var tmpDesc = tmpColorOption.title;
-      var tmpSample = tmpColorOption.src;
+      var tmpSwatch = tmpOption.querySelector("a.swatch");
+      var tmpDesc = tmpOption.title.trim();
+      var tmpSample = "";
 
       var evt = document.createEvent('CustomEvent');
-      evt.initCustomEvent('click', true, false);
-      tmpColorOption.dispatchEvent(evt);
+      evt.initCustomEvent('mouseover', true, false);
+      tmpSwatch.dispatchEvent(evt);
 
-      var tmpDemo = document.querySelector("#zoomImgHolder2 img").src;
-      var tmpPirce = document.querySelector("#PDPSellingPrice").innerText;
+      var tmpDemo = document.querySelector(".product-image__primary-image").src;
+      var exID = tmpOption.dataset.id;
+      var tmpPrice = document.querySelector("span[itemprop='price']").innerText;
 
       var tmpObject = {
         desc: tmpDesc
         , demo: tmpDemo
         , sample: tmpSample
-        , primitive_price: parseMoney(tmpPirce)
+        , primitive_price: parseMoney(tmpPrice)
         , primitive_price_currency: primitivePriceCurrency
-        , exID: tmpColorOption.id
+        , exID: exID
       };
 
-      color['data'][tmpColorOption.id] = tmpObject;
-      colors.push(tmpColorOption.id);
+      color['data'][exID] = tmpObject;
+      colors.push(exID);
     }
 
     return {color:color, colors:colors};
@@ -75,10 +76,10 @@ casper.then(function() {
 
   var retSize = this.evaluate(function() {
     var primitivePriceCurrency = "USD";
-    var sizeID = "sizes";
+    var sizeID = "size-button-set";
     var sizeName = "size";
 
-    var sizeOptions = document.querySelectorAll("#"+sizeID+" .sizeChip");
+    var sizeOptions = document.querySelectorAll("#"+sizeID+" li");
 
     var size = {};
     size['name'] = sizeName;
@@ -92,7 +93,7 @@ casper.then(function() {
 
       var tmpDesc = tmpOption.innerText;
       var tmpSample = "", tmpDemo = "";
-      var tmpID = tmpOption.id;
+      var tmpID = tmpOption.dataset.sizeName;
 
       var tmpObject = {
         desc: tmpDesc
@@ -111,9 +112,11 @@ casper.then(function() {
   });
 
   properties.push(retColor['color']);
-  properties.push(retSize['size']);
   propertiesAry.push(retColor['colors']);
-  propertiesAry.push(retSize['sizes']);
+  if (retSize['sizes'].length > 0) {
+    properties.push(retSize['size']);
+    propertiesAry.push(retSize['sizes']);
+  }
 
   var stocks = [];
   var stockMapping = cartesianProduct(propertiesAry);
@@ -138,16 +141,19 @@ casper.then(function() {
       this.evaluate(function setProperties(id, value) {
         var evt = document.createEvent('CustomEvent');
         evt.initCustomEvent('click', true, false);
-        var ele = document.querySelector("#"+value);
-        if (ele) {
-          ele.dispatchEvent(evt);
+        var ele;
+        if (id == 'size-button-set') {
+          ele = document.querySelector("[data-size-name='"+value+"']");
+        } else {
+          ele = document.querySelector("[data-id='"+value+"']");
         }
+        ele.dispatchEvent(evt);
       }, m, tmpTarget);
     }
     //this.capture('runtime/screenshot_'+x+'.png');
     stockValue = this.evaluate(function getStockStatus() {
-      var stockStr = document.querySelector("#currentSize").innerText.toLowerCase();
-      return stockStr.indexOf("is not available") > -1 ? false : true;
+      var stockStr = document.querySelector(".order-button").innerText.toLowerCase();
+      return stockStr == 'sold out' ? false : true;
     });
     if (stockValue) {
       stocks[x].soldout = 0;
@@ -160,7 +166,6 @@ casper.then(function() {
     "properties": properties
     , "stocks": stocks
   };
-
 });
 
 casper.run(function() {
