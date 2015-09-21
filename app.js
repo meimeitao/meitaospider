@@ -314,7 +314,7 @@ app.get('/crawler', function(req, res) {
 });
 
 app.get('/fetch', function(req, res){
-  var url = req.query.url
+  var url = req.query.url;
   var parser = '';
   var body = '';
   var pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
@@ -404,7 +404,10 @@ app.get('/fetch', function(req, res){
         parser = './parser/carters.js';
         break;
       case "us.asos.com":
-        parse = './parser/asos.js';
+        parser = './parser/asos.js';
+        break;
+      case "www.ashford.com":
+        parser = './parser/ashford.js';
         break;
       default:
         console.log("parser not found "+url);
