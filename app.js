@@ -208,6 +208,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.everlane.com":
       parser = './pageAutomation/everlane.js';
       break;
+    case "www.b-glowing.com":
+      parser = './pageAutomation/bglowing.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
