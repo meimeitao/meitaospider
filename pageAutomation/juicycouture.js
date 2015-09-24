@@ -26,25 +26,60 @@ casper.start(url);
 
 casper.then(function() {
     var properties = [], propertiesAry = [];
-    var primitivePriceCurrency = "EUR";
+    var primitivePriceCurrency = "USD";
 
-    var wishListOptions = this.evaluate(function() {
-        return wishlistOptions;
+    var product = this.evaluate(function() {
+        return __onestop_pageData.product;
     });
+
+    var Inventory = product.Inventory;
+    var InventoryObject = {};
+    for (var i = 0; i < Inventory.length; i++) {
+        var tmpInventory = Inventory[i];
+        var tmpIndex = tmpInventory["ColorId"] + "_" + tmpInventory["SizeId"];
+        InventoryObject[tmpIndex] = tmpInventory["IsInStock"];
+    }
+
+    var ProductColors = product.ProductColors;
+    var ProductSizes = product.ProductSizes;
+
+    var color = {};
+    color['name'] = "color";
+    color['id'] = "color";
+    color['data'] = {};
+    var colors = [];
+
+    for (var i = 0; i < ProductColors.length; i++) {
+        var tmpOption = ProductColors[i];
+        var tmpID = tmpOption["Id"];
+        var tmpDemo = tmpOption["ColorImageUrl"];
+        var tmpSample = tmpOption["ColorSwatchUrl"];
+
+        var tmpObject = {
+            desc: tmpOption["ColorName"]
+            , demo: tmpDemo.indexOf("http") > -1 ? tmpDemo : "http:" + tmpDemo
+            , sample: tmpSample.indexOf("http") > -1 ? tmpSample : "http:" + tmpSample
+            , primitive_price: 0
+            , primitive_price_currency: primitivePriceCurrency
+            , exID: tmpID
+        };
+
+        color['data'][tmpID] = tmpObject;
+        colors.push(tmpID);
+    }
 
     var size = {};
     size['name'] = "size";
     size['id'] = "size";
     size['data'] = {};
-
     var sizes = [];
 
-    for (var x in wishListOptions) {
-        var tmpOption = wishListOptions[x];
-        var tmpID = tmpOption["option_id"];
+    for (var i = 0; i < ProductSizes.length; i++) {
+        var tmpOption = ProductSizes[i];
+        var tmpID = tmpOption["Id"];
 
         var tmpObject = {
-            desc: tmpOption["size"]
+            desc: tmpOption["SizeName"]
             , demo: ""
             , sample: ""
             , primitive_price: 0
@@ -56,8 +91,11 @@ casper.then(function() {
         sizes.push(tmpID);
     }
 
+    properties.push(color);
+    propertiesAry.push(colors);
     properties.push(size);
     propertiesAry.push(sizes);
+
 
     var stocks = [];
     var stockMapping = cartesianProduct(propertiesAry);
@@ -76,14 +114,13 @@ casper.then(function() {
     var tmpStock, stockValue, tmpTarget;
     for (var x in stocks) {
         tmpStock = stocks[x];
+        tmpTarget = [];
         for (var m in tmpStock) {
             if (m == 'soldout') continue;
-            tmpTarget = tmpStock[m];
+            tmpTarget.push(tmpStock[m]);
         }
-        stockValue = this.evaluate(function setProperties(id, value) {
-            var ele = document.querySelector(".sizes a[onclick*='"+value+"']");
-            return ele.className == 'addtowishlist' ? false : true;
-        }, m, tmpTarget);
+        var tmpIndex = tmpTarget.join("_");
+        stockValue = InventoryObject[tmpIndex];
         if (stockValue) {
             stocks[x].soldout = 0;
         } else {
