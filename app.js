@@ -220,6 +220,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.kipling-usa.com":
       parser = './pageAutomation/kipling-usa.js';
       break;
+    case "www.shopbop.com":
+      parser = './pageAutomation/shopbop.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
