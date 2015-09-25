@@ -37,6 +37,8 @@ casper.then(function() {
   var sizeName = "size";
   var choiceName = "choice";
   var choiceID = "choice";
+  var widthName = "width";
+  var widthID = "width";
 
   var itemMap = this.evaluate(function() {
     return nord.config.settings.product.skus;
@@ -46,7 +48,7 @@ casper.then(function() {
     return nord.config.settings.urls.gallery;
   });
 
-  var color = {}, size = {}, choice = {};
+  var color = {}, size = {}, choice = {}, width = {};
   color['name'] = colorName;
   color['id'] = colorID;
   color['data'] = {};
@@ -56,26 +58,32 @@ casper.then(function() {
   choice['name'] = choiceName;
   choice['id'] = choiceID;
   choice['data'] = {};
+  width['name'] = widthName;
+  width['id'] = widthID;
+  width['data'] = {};
 
   var choices = [];
   var colores = [];
   var sizes = [];
+  var widthes = [];
   for(var i = 0; i < itemMap.length; i++) {
     var tmpItem = itemMap[i];
 
     //版型START
     if (!choice["data"][tmpItem["choiceGroup"]]) {
-      var tmpChoiceGroup = {
-        desc: tmpItem['choiceGroup']
-        , demo: ""
-        , sample: ""
-        , primitive_price: parseMoney(tmpItem["originalPrice"])
-        , primitive_price_currency: primitivePriceCurrency
-        , exID: tmpItem['choiceGroup']
-      };
+      if (tmpItem['choiceGroup']) {
+        var tmpChoiceGroup = {
+          desc: tmpItem['choiceGroup']
+          , demo: ""
+          , sample: ""
+          , primitive_price: parseMoney(tmpItem["originalPrice"])
+          , primitive_price_currency: primitivePriceCurrency
+          , exID: tmpItem['choiceGroup']
+        };
 
-      choice["data"][tmpItem["choiceGroup"]] = tmpChoiceGroup;
-      choices.push(tmpItem["choiceGroup"]);
+        choice["data"][tmpItem["choiceGroup"]] = tmpChoiceGroup;
+        choices.push(tmpItem["choiceGroup"]);
+      }
     }
 
     //COLOR START
@@ -113,21 +121,50 @@ casper.then(function() {
       sizes.push(tmpItem["size"]);
     }
 
+    //WIDTH START
+    if (!width["data"][tmpItem["width"]]) {
+      if (tmpItem['width']) {
+        var tmpSizeObject = {
+          desc: tmpItem["width"]
+          , demo: ""
+          , sample: ""
+          , primitive_price: 0
+          , primitive_price_currency: primitivePriceCurrency
+          , exID: tmpItem["width"]
+        };
+
+        width["data"][tmpItem["width"]] = tmpSizeObject;
+        widthes.push(tmpItem["width"]);
+      }
+    }
+
     var stockKeyArray = [];
-    stockKeyArray.push(tmpItem["choiceGroup"]);
+    if (tmpItem["choiceGroup"]) {
+      stockKeyArray.push(tmpItem["choiceGroup"]);
+    }
     stockKeyArray.push(tmpItem["colorId"]);
     stockKeyArray.push(tmpItem["size"]);
+    if (tmpItem["width"]) {
+      stockKeyArray.push(tmpItem["width"]);
+    }
     var stockKey = stockKeyArray.join("_");
     oStocks[stockKey] = 1;
   }
 
-  propertiesAry.push(choices);
-  propertiesAry.push(colores);
-  propertiesAry.push(sizes);
+  if (choices.length > 0) {
+    propertiesAry.push(choices);
+    properties.push(choice);
+  }
 
-  properties.push(choice);
+  propertiesAry.push(colores);
   properties.push(color);
   properties.push(size);
+  propertiesAry.push(sizes);
+
+  if (widthes.length > 0) {
+    propertiesAry.push(widthes);
+    properties.push(width);
+  }
 
   var stocks = [];
   var stockMapping = cartesianProduct(propertiesAry);
