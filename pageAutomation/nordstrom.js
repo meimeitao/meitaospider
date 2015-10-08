@@ -28,6 +28,12 @@ var retData = {};
 
 casper.start(url);
 
+casper.waitFor(function check() {
+  return this.evaluate(function() {
+    return nord.config.settings.product.skus ? true :false;
+  });
+});
+
 casper.then(function() {
   var properties = [], oStocks = {}, propertiesAry = [];
   var primitivePriceCurrency = "USD";
