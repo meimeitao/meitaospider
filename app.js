@@ -427,6 +427,9 @@ app.get('/fetch', function(req, res){
       case "www.ashford.com":
         parser = './parser/ashford.js';
         break;
+      case "www.6pm.com":
+        parser = './parser/6pm.js';
+        break;
       default:
         console.log("parser not found "+url);
         res.set('Content-Type', 'application/json');
