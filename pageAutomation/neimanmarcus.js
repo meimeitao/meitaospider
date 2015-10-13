@@ -48,10 +48,11 @@ casper.then(function() {
             var tmpOption = colorOptions[i];
 
             if (tmpOption.value == "") continue;
-
+            
             var tmpDesc = tmpOption.innerText;
-            var tmpSample = document.querySelector(".product-thumbnail").src;
-            var tmpDemo = document.querySelector(".product-thumbnail").dataset.mainUrl;
+            var thumbnail = document.querySelector(".product-thumbnail");
+            var tmpSample = thumbnail ? thumbnail.src : "";
+            var tmpDemo = thumbnail ? thumbnail.dataset.mainUrl : "";
             var tmpPrice = document.querySelector("[itemprop='price']").innerText.trim();
             var tmpID = tmpOption.value;
 
@@ -111,9 +112,11 @@ casper.then(function() {
     });
 
     properties.push(retColor['color']);
-    properties.push(retSize['size']);
     propertiesAry.push(retColor['colors']);
-    propertiesAry.push(retSize['sizes']);
+    if (retSize["sizes"].length > 0) {
+      properties.push(retSize['size']);
+      propertiesAry.push(retSize['sizes']);
+    }
 
     var stockMapping = cartesianProduct(propertiesAry);
     for (var x in stockMapping) {
