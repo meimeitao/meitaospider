@@ -331,6 +331,28 @@ app.get('/crawler', function(req, res) {
   });
 });
 
+//通用型,基本页面信息抓取
+app.post('/basic', urlencodedParser, function(req, res) {
+  var url = req.body.url;
+  var body = '';
+  var parser = './pageAutomation/basic.js';
+
+  var pt = spawn('casperjs', ["--ssl-protocol=any", parser, url]);
+
+  pt.stdout.on('data', function (data) {
+    body += data;
+  });
+
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  pt.on('close', function (code) {
+    res.set('Content-Type', 'application/json');
+    res.send(body);
+  });
+});
+
 app.get('/fetch', function(req, res){
   var url = req.query.url;
   var parser = '';
