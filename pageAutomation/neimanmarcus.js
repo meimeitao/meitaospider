@@ -146,7 +146,8 @@ casper.then(function() {
         //this.capture('runtime/screenshot_'+x+'.png');
         stockValue = this.evaluate(function getStockStatus() {
             var stockStr = document.querySelector(".product-status").innerText;
-            return stockStr == "In Stock" ? true : false;
+            //return stockStr == "In Stock" ? true : false;
+            return true;
         });
         if (stockValue) {
             stocks[x].soldout = 0;
