@@ -256,6 +256,27 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   });
 });
 
+app.get('/mashort', function(req, res) {
+  var url = req.query.url;
+  var body = '';
+
+  var pt = spawn('phantomjs', ['--load-images=false', 'mashort.js', url]);
+
+  pt.stdout.on('data', function (data) {
+    body += data;
+  });
+
+  pt.stderr.on('data', function (data) {
+    console.log('stderr: ' + data);
+  });
+
+  pt.on('close', function(code) {
+    var j = {"redirectUrl":body};
+    res.set('Content-Type', 'application/json');
+    res.send(j);
+  });
+});
+
 app.get('/crawler', function(req, res) {
   var url = req.query.url;
   var parser = '';
