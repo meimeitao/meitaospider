@@ -226,6 +226,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.follifollie.us.com":
       parser = './pageAutomation/follifollie.js';
       break;
+    case "www.saksfifthavenue.com":
+      parser = './pageAutomation/saksfifthavenue.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
