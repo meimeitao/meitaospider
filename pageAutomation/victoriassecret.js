@@ -63,7 +63,8 @@ casper.then(function() {
         tmpInput.dispatchEvent(evt);
         
         if (tmpInput.dataset.mainImage) {
-          tmpDemo = document.querySelector("#vsImage").src;
+          //tmpDemo = document.querySelector("#vsImage").src;
+          tmpDemo = "http://dm.victoriassecret.com/product/404x539/" + tmpInput.dataset.mainImage;
         }
         var tmpPrice = String(0);
         //while (true) {
@@ -138,10 +139,12 @@ casper.then(function() {
         ele.dispatchEvent(evt);
       }, m, tmpTarget);
     }
-    stockValue = this.evaluate(function() {
-      var messageEle = document.querySelector(".atp-message").innerText;
-      return messageEle ? false : true;
-    });
+    stockValue = this.evaluate(function(propertiesLength) {
+      //var messageEle = document.querySelector(".atp-message").innerText;
+      //var messageEle = document.querySelector(".atpError");
+      //return messageEle ? false : true;
+      return document.querySelectorAll("input:checked").length == propertiesLength ? false : true;
+    }, properties.length);
     //this.capture("./runtime/screencapture_"+x+".png");
     if (stockValue) {
       stocks[x].soldout = 1;
