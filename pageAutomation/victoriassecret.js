@@ -4,7 +4,7 @@ var casper = require('casper').create({
     loadPlugins: false,
     userAgent: 'Mozilla/5.0 (Windows; U; Windows NT 5.1; nl; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'
   },
-  timeout: 300000 //MS 5mins
+  timeout: 600000 //MS 10mins
 });
 var utils = require("utils");
 var system = require('system');
@@ -139,12 +139,10 @@ casper.then(function() {
         ele.dispatchEvent(evt);
       }, m, tmpTarget);
     }
-    stockValue = this.evaluate(function(propertiesLength) {
-      //var messageEle = document.querySelector(".atp-message").innerText;
-      //var messageEle = document.querySelector(".atpError");
-      //return messageEle ? false : true;
+    stockValue = this.evaluate(function() {
+      var propertiesLength = document.querySelectorAll(".primary .module").length - 1;
       return document.querySelectorAll("input:checked").length == propertiesLength ? false : true;
-    }, properties.length);
+    });
     //this.capture("./runtime/screencapture_"+x+".png");
     if (stockValue) {
       stocks[x].soldout = 1;
