@@ -153,6 +153,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   var body = "";
 
   var hostname = urls.parse(url).hostname;
+  var sslTLSV = false;
   switch (hostname) {
     case "www.6pm.com":
     case "www.zappos.com":
@@ -169,6 +170,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
       parser = './pageAutomation/ralphlauren.js';
       break;
     case "www.victoriassecret.com":
+      sslTLSV = true;
       parser = './pageAutomation/victoriassecret.js';
       break;
     case "us.asos.com":
@@ -243,7 +245,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
   }
   if (!parser) return false;
 
-  var pt = spawn('casperjs', ["--ssl-protocol=any", parser, url]);
+  var sslProtocol = sslTLSV ? "tlsv1" : "any";
+
+  var pt = spawn('casperjs', ["--ssl-protocol="+sslProtocol, parser, url]);
 
   pt.stdout.on('data', function (data) {
     body += data;
