@@ -38,27 +38,6 @@ casper.then(function() {
       }
     }
     tmpData['img'] = img;
-
-    var host = window.location.host;
-    if (host.indexOf("tmall") > -1) {
-      if (document.querySelector(".mui-price-integer")) {
-        tmpData["price"] = document.querySelector(".mui-price-integer").innerText;
-      }
-    } else if (host.indexOf("taobao") > -1) {
-      if (document.querySelector(".dtif-h")) {
-        tmpData["title"] = document.querySelector(".dtif-h").innerText;
-      }
-      if (document.querySelector("#item-price-line")) {
-        tmpData["price"] = document.querySelector("#item-price-line").innerText;
-      } else if (document.querySelector("strong.dt-jup")) {
-        tmpData["price"] = document.querySelector("strong.dt-jup").innerText;
-      }
-    }
-    try {
-      tmpData["price"] = parseFloat(tmpData["price"].match(/[\d|\.]+/g)[0]).toFixed(2);
-    } catch (e) {
-      tmpData["price"] = 0;
-    }
     return tmpData;
   });
 });
