@@ -231,6 +231,12 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.saksfifthavenue.com":
       parser = './pageAutomation/saksfifthavenue.js';
       break;
+    case "www.toryburch.com":
+      parser = './pageAutomation/toryburch.js';
+      break;
+    case "www.anntaylor.com":
+      parser = './pageAutomation/anntaylor.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
