@@ -243,6 +243,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "needsupply.com":
       parser = './pageAutomation/needsupply.js';
       break;
+    case "www.colehaan.com":
+      parser = './pageAutomation/colehaan.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;

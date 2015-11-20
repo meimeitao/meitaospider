@@ -150,7 +150,7 @@ casper.then(function() {
       }, m, tmpTarget);
       if (m == 'size') sizeID = tmpTarget;
     }
-    this.capture('runtime/screenshot_'+x+'.png');
+    //this.capture('runtime/screenshot_'+x+'.png');
     stockValue = this.evaluate(function getStockStatus(sizeID) {
       var sizeSwatch = document.querySelector(".swatchanchor[title='"+sizeID+"']");
       return sizeSwatch.parentNode.className.indexOf("unselectable") > -1 ? false : true;
