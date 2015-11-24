@@ -174,6 +174,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
       parser = './pageAutomation/victoriassecret.js';
       break;
     case "us.asos.com":
+    case "www.asos.com":
       parser = './pageAutomation/asos.js';
       break;
     case "www.stevemadden.com":
