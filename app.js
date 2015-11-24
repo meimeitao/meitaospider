@@ -224,6 +224,7 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
       parser = './pageAutomation/kipling-usa.js';
       break;
     case "www.shopbop.com":
+    case "cn.shopbop.com":
       parser = './pageAutomation/shopbop.js';
       break;
     case "www.follifollie.us.com":
