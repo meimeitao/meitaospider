@@ -12,37 +12,27 @@ var cartesianProduct = require('cartesian-product');
 
 var url = args[0];
 
-casper.on("remote.message", function(message) {
-  this.echo("remote console.log: " + message);
-});
-
-casper.on('page.error', function (msg, trace) {
-  this.echo( 'Error: ' + msg, 'ERROR' );
-});
+//casper.on("remote.message", function(message) {
+//  this.echo("remote console.log: " + message);
+//});
+//
+//casper.on('page.error', function (msg, trace) {
+//  this.echo( 'Error: ' + msg, 'ERROR' );
+//});
 
 var retData = {};
 
-casper.start(url, function() {
-  this.echo("Opening url: "+url);
-});
+casper.start(url);
 
 casper.then(function() {
   var properties = [], stocks = [], propertiesAry = [];
 
-  this.capture("runtime/main.png");
-
   var retColor = this.evaluate(function() {
-    function parseMoney(amount) {
-      return amount ? (amount.replace(/[^0-9\.]+/g,"")) : 0;
-    }
-
     var primitivePriceCurrency = "USD";
     var colorID = "Color";
     var colorName = "color";
 
-    console.log("."+colorID+" li");
-    var colorOptions = document.querySelectorAll("."+colorID+" li");
-    console.log(colorOptions.length);
+    var colorOptions = document.querySelectorAll(".swatches."+colorID+" li.selected");
     var color = {};
     color['name'] = colorName;
     color['id'] = colorID;
@@ -52,20 +42,19 @@ casper.then(function() {
 
     for (var i = 0; i < colorOptions.length; i++) {
       var tmpOption = colorOptions[i];
-      var tmpSwatchanchor = tmpOption.querySelector("a.swatchanchor");
-      var tmpSwatchImg = tmpSwatchanchor.querySelector("img");
 
-      var tmpDesc = tmpSwatchanchor.title;
-      var tmpSample = tmpOption.dataset.pimage;
-      var tmpDemo = tmpSwatchImg.src;
-      var tmpPrice = document.querySelector("span.price-sales").innerText.trim();
+      var sampleEle = tmpOption.querySelector("img");
+
+      var tmpDesc = tmpOption.querySelector(".title").innerText.trim();
+      var tmpSample = sampleEle ? sampleEle.src : "";
+      var tmpDemo = tmpOption.dataset.pimage;
       var tmpID = tmpOption.dataset.value;
 
       var tmpObject = {
         desc: tmpDesc
         , demo: tmpDemo
         , sample: tmpSample
-        , primitive_price: parseMoney(tmpPrice)
+        , primitive_price: 0
         , primitive_price_currency: primitivePriceCurrency
         , exID: tmpID
       };
@@ -82,7 +71,7 @@ casper.then(function() {
     var sizeID = "size";
     var sizeName = "size";
 
-    var sizeOptions = document.querySelectorAll("."+sizeID+" li a");
+    var sizeOptions = document.querySelectorAll(".swatches."+sizeID+" li:not(.unselectable) a");
 
     var size = {};
     size['name'] = sizeName;
@@ -116,7 +105,7 @@ casper.then(function() {
 
   properties.push(retColor['color']);
   propertiesAry.push(retColor['colors']);
-  if (retSize['size'].length > 0) {
+  if (retSize["sizes"].length > 0) {
     properties.push(retSize['size']);
     propertiesAry.push(retSize['sizes']);
   }
@@ -130,36 +119,8 @@ casper.then(function() {
       var selector = properties[y].id;
       tmpStock[selector] = selectValue;
     }
-    tmpStock['soldout'] = 1;
+    tmpStock['soldout'] = 0;
     stocks.push(tmpStock);
-  }
-
-  var tmpStock, stockValue, tmpTarget;
-  for (var x in stocks) {
-    tmpStock = stocks[x];
-    var sizeID;
-    for (var m in tmpStock) {
-      if (m == 'soldout') continue;
-      tmpTarget = tmpStock[m];
-      this.evaluate(function setProperties(id, value) {
-        if (id != 'Color') return false;
-        var evt = document.createEvent('CustomEvent');
-        evt.initCustomEvent('click', true, false);
-        var ele = document.querySelector("."+id+" li[data-value='"+value+"']");
-        ele.dispatchEvent(evt);
-      }, m, tmpTarget);
-      if (m == 'size') sizeID = tmpTarget;
-    }
-    //this.capture('runtime/screenshot_'+x+'.png');
-    stockValue = this.evaluate(function getStockStatus(sizeID) {
-      var sizeSwatch = document.querySelector(".swatchanchor[title='"+sizeID+"']");
-      return sizeSwatch.parentNode.className.indexOf("unselectable") > -1 ? false : true;
-    }, sizeID);
-    if (stockValue) {
-      stocks[x].soldout = 0;
-    } else {
-      stocks[x].soldout = 1;
-    }
   }
 
   retData = {

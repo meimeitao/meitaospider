@@ -1,7 +1,7 @@
 var casper = require('casper').create({
   pageSettings: {
     loadImages:  false,
-    loadPlugins: false
+    //loadPlugins: false
   },
   timeout: 300000 //MS 5mins
 });
@@ -19,6 +19,15 @@ var url = args[0];
 //casper.on('page.error', function (msg, trace) {
 //  this.echo( 'Error: ' + msg, 'ERROR' );
 //});
+
+var GetProductAvailabilityFlag = false;
+
+casper.options.onResourceRequested = function(resource, request) {
+  if (request.url.indexOf("GetProductAvailability") > -1) {
+    //this.echo( 'Request Url is : ' + request.url);
+    GetProductAvailabilityFlag = true;
+  }
+};
 
 var retData = {};
 
@@ -132,23 +141,32 @@ casper.then(function() {
   var tmpStock, stockValue, tmpTarget;
   for (var x in stocks) {
     tmpStock = stocks[x];
-    for (var m in tmpStock) {
-      if (m == 'soldout') continue;
-      tmpTarget = tmpStock[m];
-      this.evaluate(function setProperties(id, value) {
+
+    var clicked = this.evaluate(function setProperties(id, value) {
+      var ele = document.querySelector("#"+value+".selected_false");
+      if (ele) {
         var evt = document.createEvent('CustomEvent');
         evt.initCustomEvent('click', true, false);
-        var ele = document.querySelector("#"+value);
-        if (ele) {
-          ele.dispatchEvent(evt);
+        ele.dispatchEvent(evt);
+        return true;
+      }
+      return false;
+    }, "colorChips", tmpStock["colorChips"]);
+
+    if (clicked) {
+      while (true) {
+        if (GetProductAvailabilityFlag) {
+          GetProductAvailabilityFlag = false;
+          break;
         }
-      }, m, tmpTarget);
+      }
     }
-    //this.capture('runtime/screenshot_'+x+'.png');
-    stockValue = this.evaluate(function getStockStatus() {
-      var stockStr = document.querySelector("#currentSize").innerText.toLowerCase();
-      return stockStr.indexOf("is not available") > -1 ? false : true;
-    });
+
+    stockValue = this.evaluate(function(id, value) {
+      var sizeEle = document.querySelector("#"+value+".available");
+      return sizeEle ? true : false;
+    },"sizes",tmpStock["sizes"]);
+
     if (stockValue) {
       stocks[x].soldout = 0;
     } else {
