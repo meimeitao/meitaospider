@@ -254,6 +254,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.farfetch.com":
       parser = './pageAutomation/farfetch.js';
       break;
+    case "www.revolveclothing.com":
+      parser = './pageAutomation/revolveclothing.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
