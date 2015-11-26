@@ -263,6 +263,12 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.coggles.com":
       parser = './pageAutomation/coggles.js';
       break;
+    case "www.giorgioarmanibeauty-usa.com":
+      parser = './pageAutomation/giorgioarmanibeauty-usa.js';
+      break;
+    case "www.yslbeautyus.com":
+      parser = './pageAutomation/yslbeautyus.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
