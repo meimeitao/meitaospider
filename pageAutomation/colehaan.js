@@ -12,13 +12,13 @@ var cartesianProduct = require('cartesian-product');
 
 var url = args[0];
 
-//casper.on("remote.message", function(message) {
-//  this.echo("remote console.log: " + message);
-//});
-//
-//casper.on('page.error', function (msg, trace) {
-//    this.echo( 'Error: ' + msg, 'ERROR' );
-//});
+casper.on("remote.message", function(message) {
+  this.echo("remote console.log: " + message);
+});
+
+casper.on('page.error', function (msg, trace) {
+    this.echo( 'Error: ' + msg, 'ERROR' );
+});
 
 casper.start(url);
 
@@ -45,8 +45,12 @@ casper.then(function() {
 
             var tmpDesc = tmpOption.title;
             var tmpSample = tmpOption.style.background.replace(/url\((.*)\)/,"$1");
-            var tmpLgImgJSON = JSON.parse(tmpOption.dataset.lgimg);
-            var tmpDemo = tmpLgImgJSON["url"];
+            try {
+                var tmpLgImgJSON = JSON.parse(tmpOption.dataset.lgimg);
+                var tmpDemo = tmpLgImgJSON["url"];
+            } catch (Exception) {
+                var tmpDemo = "";
+            }
             var tmpID = tmpOption.title;
 
             var tmpObject = {
