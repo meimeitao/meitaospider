@@ -12,13 +12,13 @@ var cartesianProduct = require('cartesian-product');
 
 var url = args[0];
 
-casper.on("remote.message", function(message) {
-  this.echo("remote console.log: " + message);
-});
-
-casper.on('page.error', function (msg, trace) {
-    this.echo( 'Error: ' + msg, 'ERROR' );
-});
+//casper.on("remote.message", function(message) {
+//  this.echo("remote console.log: " + message);
+//});
+//
+//casper.on('page.error', function (msg, trace) {
+//    this.echo( 'Error: ' + msg, 'ERROR' );
+//});
 
 casper.start(url);
 
