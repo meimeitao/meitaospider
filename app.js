@@ -272,6 +272,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.uggaustralia.com":
       parser = './pageAutomation/uggaustralia.js';
       break;
+    case "www.bluefly.com":
+      parser = './pageAutomation/bluefly.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
