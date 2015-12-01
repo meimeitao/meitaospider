@@ -130,7 +130,6 @@ casper.then(function() {
             if (m == 'soldout') continue;
             tmpTarget = tmpStock[m];
             this.evaluate(function setProperties(id, value) {
-                console.log(".item."+id+"[title='"+value+"']");
                 var ele = document.querySelector(".item."+id+"[title='"+value+"']");
                 var evt = document.createEvent('CustomEvent');
                 evt.initCustomEvent('click', true, false);

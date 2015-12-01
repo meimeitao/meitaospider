@@ -30,150 +30,115 @@ casper.start(url);
 
 casper.waitFor(function check() {
   return this.evaluate(function() {
-    return nord.config.settings.product.skus ? true :false;
+    return ProductData.Model.StyleModel ? true :false;
   });
 });
 
 casper.then(function() {
   var properties = [], oStocks = {}, propertiesAry = [];
   var primitivePriceCurrency = "USD";
-  var colorID = "color";
-  var colorName = "color";
-  var sizeID = "size";
-  var sizeName = "size";
-  var choiceName = "choice";
-  var choiceID = "choice";
-  var widthName = "width";
-  var widthID = "width";
 
-  var itemMap = this.evaluate(function() {
-    return nord.config.settings.product.skus;
+  var variants = this.evaluate(function() {
+    return ProductData.Model.StyleModel.ChoiceGroups[0];
   });
 
-  var galleryUrl = this.evaluate(function() {
-    return nord.config.settings.urls.gallery;
-  });
-
-  var color = {}, size = {}, choice = {}, width = {};
-  color['name'] = colorName;
-  color['id'] = colorID;
+  var color = {};
+  color['name'] = "color";
+  color['id'] = "Color";
   color['data'] = {};
-  size['name'] = sizeName;
-  size['id'] = sizeID;
+
+  var colors = [];
+
+  for (var i = 0; i < variants.Color.length; i++) {
+    var tmpOption = variants.Color[i];
+
+    var tmpDesc = tmpOption.Value;
+    var tmpSample = tmpOption.SwatchUrl;
+    var tmpDemo = tmpOption.MiniUrl;
+    var tmpID = tmpOption.Value;
+
+    var tmpObject = {
+      desc: tmpDesc
+      , demo: tmpDemo
+      , sample: tmpSample
+      , primitive_price: 0
+      , primitive_price_currency: primitivePriceCurrency
+      , exID: tmpID
+    };
+
+    color['data'][tmpID] = tmpObject;
+    colors.push(tmpID);
+  }
+
+  var size = {};
+  size['name'] = "size";
+  size['id'] = "Size";
   size['data'] = {};
-  choice['name'] = choiceName;
-  choice['id'] = choiceID;
-  choice['data'] = {};
-  width['name'] = widthName;
-  width['id'] = widthID;
+
+  var sizes = [];
+
+  for (var i = 0; i < variants.Size.length; i++) {
+    var tmpOption = variants.Size[i];
+
+    var tmpDesc = tmpOption.Value;
+    var tmpSample = "", tmpDemo = "";
+    var tmpID = tmpOption.Value;
+
+    var tmpObject = {
+      desc: tmpDesc
+      , demo: tmpDemo
+      , sample: tmpSample
+      , primitive_price: 0
+      , primitive_price_currency: primitivePriceCurrency
+      , exID: tmpID
+    };
+
+    size['data'][tmpID] = tmpObject;
+    sizes.push(tmpID);
+  }
+
+  var width = {};
+  width['name'] = "width";
+  width['id'] = "Width";
   width['data'] = {};
 
-  var choices = [];
-  var colores = [];
-  var sizes = [];
   var widthes = [];
-  for(var i = 0; i < itemMap.length; i++) {
-    var tmpItem = itemMap[i];
 
-    //版型START
-    if (!choice["data"][tmpItem["choiceGroup"]]) {
-      if (tmpItem['choiceGroup']) {
-        var tmpChoiceGroup = {
-          desc: tmpItem['choiceGroup']
-          , demo: ""
-          , sample: ""
-          , primitive_price: parseMoney(tmpItem["originalPrice"])
-          , primitive_price_currency: primitivePriceCurrency
-          , exID: tmpItem['choiceGroup']
-        };
+  for (var i = 0; i < variants.Width.length; i++) {
+    var tmpOption = variants.Width[i];
 
-        choice["data"][tmpItem["choiceGroup"]] = tmpChoiceGroup;
-        choices.push(tmpItem["choiceGroup"]);
-      }
-    }
+    var tmpDesc = tmpOption.Value;
+    var tmpSample = "", tmpDemo = "";
+    var tmpID = tmpOption.Value;
 
-    //COLOR START
-    if (!color["data"][tmpItem["colorId"]]) {
-      var tmpDemo = this.evaluate(function(colorID) {
-        var colorSwatchEle = document.querySelector("#color-"+colorID);
-        return colorSwatchEle ? colorSwatchEle.dataset.imgFilename : "";
-      }, tmpItem["colorId"]);
+    var tmpObject = {
+      desc: tmpDesc
+      , demo: tmpDemo
+      , sample: tmpSample
+      , primitive_price: 0
+      , primitive_price_currency: primitivePriceCurrency
+      , exID: tmpID
+    };
 
-      var tmpColorObject = {
-        desc: tmpItem["color"]
-        , demo: galleryUrl + tmpDemo
-        , sample: galleryUrl + tmpItem["swatchImageUrl"]
-        , primitive_price: 0
-        , primitive_price_currency: primitivePriceCurrency
-        , exID: tmpItem["colorId"]
-      };
-
-      color["data"][tmpItem["colorId"]] = tmpColorObject;
-      colores.push(tmpItem["colorId"]);
-    }
-
-    //SIZE START
-    if (!size["data"][tmpItem["size"]]) {
-      var tmpSizeObject = {
-        desc: tmpItem["size"]
-        , demo: ""
-        , sample: ""
-        , primitive_price: 0
-        , primitive_price_currency: primitivePriceCurrency
-        , exID: tmpItem["size"]
-      };
-
-      size["data"][tmpItem["size"]] = tmpSizeObject;
-      sizes.push(tmpItem["size"]);
-    }
-
-    //WIDTH START
-    if (!width["data"][tmpItem["width"]]) {
-      if (tmpItem['width']) {
-        var tmpSizeObject = {
-          desc: tmpItem["width"]
-          , demo: ""
-          , sample: ""
-          , primitive_price: 0
-          , primitive_price_currency: primitivePriceCurrency
-          , exID: tmpItem["width"]
-        };
-
-        width["data"][tmpItem["width"]] = tmpSizeObject;
-        widthes.push(tmpItem["width"]);
-      }
-    }
-
-    var stockKeyArray = [];
-    if (tmpItem["choiceGroup"]) {
-      stockKeyArray.push(tmpItem["choiceGroup"]);
-    }
-    stockKeyArray.push(tmpItem["colorId"]);
-    stockKeyArray.push(tmpItem["size"]);
-    if (tmpItem["width"]) {
-      stockKeyArray.push(tmpItem["width"]);
-    }
-    var stockKey = stockKeyArray.join("_");
-    oStocks[stockKey] = 1;
+    width['data'][tmpID] = tmpObject;
+    widthes.push(tmpID);
   }
 
-  if (choices.length > 0) {
-    propertiesAry.push(choices);
-    properties.push(choice);
+  if (colors.length > 0) {
+    properties.push(color);
+    propertiesAry.push(colors);
   }
-
-  propertiesAry.push(colores);
-  properties.push(color);
-  properties.push(size);
-  propertiesAry.push(sizes);
-
+  if (sizes.length > 0) {
+    properties.push(size);
+    propertiesAry.push(sizes);
+  }
   if (widthes.length > 0) {
-    propertiesAry.push(widthes);
     properties.push(width);
+    propertiesAry.push(widthes);
   }
 
-  var stocks = [];
   var stockMapping = cartesianProduct(propertiesAry);
+  var stocks = [];
   for (var x in stockMapping) {
     var tmpRow = stockMapping[x];
     var tmpStock = {};
@@ -186,20 +151,25 @@ casper.then(function() {
     stocks.push(tmpStock);
   }
 
-  var tmpStock, stockValue;
+  var Skus = this.evaluate(function() {
+    return ProductData.Model.StyleModel.Skus;
+  });
+
+  var indexedSkus = {};
+  for (var i = 0; i < Skus.length; i++) {
+    var tmpSku = Skus[i];
+    var index = tmpSku["Color"] + "_" + tmpSku["Size"] + "_" + tmpSku["Width"];
+    indexedSkus[index] = tmpSku["IsAvailable"];
+  }
+
+  var tmpStock;
   for (var x in stocks) {
-    tmpStock = stocks[x];
-    var tmpTarget = [];
-    for (var m in tmpStock) {
-      if (m == 'soldout') continue;
-      tmpTarget.push(tmpStock[m]);
-    }
-    var tmpTargetStr = tmpTarget.join("_");
-    stockValue = oStocks[tmpTargetStr] ? false : true;
-    if (stockValue) {
-      stocks[x].soldout = 1;
+    var tmpStock = stocks[x];
+    var index = tmpStock["Color"] + "_" + tmpStock["Size"] + "_" + tmpStock["Width"];
+    if (indexedSkus[index]) {
+      tmpStock["soldout"] = 0;
     } else {
-      stocks[x].soldout = 0;
+      tmpStock["soldout"] = 1;
     }
   }
 
