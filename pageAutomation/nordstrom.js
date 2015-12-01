@@ -158,14 +158,27 @@ casper.then(function() {
   var indexedSkus = {};
   for (var i = 0; i < Skus.length; i++) {
     var tmpSku = Skus[i];
-    var index = tmpSku["Color"] + "_" + tmpSku["Size"] + "_" + tmpSku["Width"];
+    var index = tmpSku["Color"];
+    if (tmpSku["Size"]) {
+      index += "_" + tmpSku["Size"];
+    }
+    if (tmpSku["Width"]) {
+      index += "_" + tmpSku["Width"];
+    }
+
     indexedSkus[index] = tmpSku["IsAvailable"];
   }
 
   var tmpStock;
   for (var x in stocks) {
     var tmpStock = stocks[x];
-    var index = tmpStock["Color"] + "_" + tmpStock["Size"] + "_" + tmpStock["Width"];
+    var index = tmpStock["Color"];
+    if (tmpStock["Size"]) {
+      index += "_" + tmpStock["Size"];
+    }
+    if (tmpStock["Width"]) {
+      index += "_" + tmpStock["Width"];
+    }
     if (indexedSkus[index]) {
       tmpStock["soldout"] = 0;
     } else {
