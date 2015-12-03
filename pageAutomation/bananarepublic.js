@@ -43,7 +43,10 @@ casper.then(function() {
 
             var tmpDesc = tmpOption.alt.replace("product image","");
             var tmpSample = tmpOption.src;
-            var tmpDemo = mainImage ? "http://" + location.host + mainImage.src : "";
+            var tmpDemo = mainImage ? mainImage.src : "";
+            if (tmpDemo && tmpDemo.indexOf("http") < 0) {
+                tmpDemo = location.origin + tmpDemo;
+            }
             var tmpID = tmpOption.id;
 
             var tmpObject = {
