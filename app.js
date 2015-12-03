@@ -275,6 +275,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.bluefly.com":
       parser = './pageAutomation/bluefly.js';
       break;
+    case "www.childrensplace.com":
+      parser = './pageAutomation/childrensplace.js';
+      break;
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
