@@ -52,8 +52,13 @@ casper.then(function() {
             var tmpOption = colorOptions[i];
 
             var tmpDesc = tmpOption.title.trim();
-            var tmpLgImgJSON = JSON.parse(tmpOption.dataset.lgimg);
-            var tmpDemo = tmpLgImgJSON["url"];
+            try {
+                var tmpLgImgJSON = JSON.parse(tmpOption.dataset.lgimg);
+                var tmpDemo = tmpLgImgJSON["url"];
+            } catch (e) {
+                var tmpDemo = "";
+            }
+
             var tmpSample = "";
             var tmpID = tmpDesc;
 
