@@ -50,9 +50,12 @@ casper.then(function() {
             if (tmpOption.value == "") continue;
             
             var tmpDesc = tmpOption.innerText;
-            var thumbnail = document.querySelector(".product-thumbnail");
+            var thumbnail = document.querySelector(".swatch-picker[data-color-name='"+tmpOption.value+"']");
             var tmpSample = thumbnail ? thumbnail.src : "";
-            var tmpDemo = thumbnail ? thumbnail.dataset.mainUrl : "";
+            if (tmpSample.indexOf("http") < 0) {
+                tmpSample = location.origin + tmpSample;
+            }
+            var tmpDemo = "";
             var tmpPrice = document.querySelector("[itemprop='price']").innerText.trim();
             var tmpID = tmpOption.value;
 
