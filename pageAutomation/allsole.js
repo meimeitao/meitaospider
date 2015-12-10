@@ -34,7 +34,8 @@ casper.then(function() {
 
         var primitivePriceCurrency = "USD";
         var colorID = "opts-1";
-        var colorName = "color";
+        var tmpName = document.querySelector("#"+colorID).previousElementSibling.previousElementSibling.innerText.trim();
+        var colorName = tmpName;
 
         var colorOptions = document.querySelectorAll("#"+colorID+" option");
         var color = {};
@@ -74,7 +75,8 @@ casper.then(function() {
     var retSize = this.evaluate(function() {
         var primitivePriceCurrency = "USD";
         var sizeID = "opts-2";
-        var sizeName = "size";
+        var tmpName = document.querySelector("#"+sizeID).previousElementSibling.previousElementSibling.innerText.trim();
+        var sizeName = tmpName;
 
         var sizeOptions = document.querySelectorAll("#"+sizeID+" option");
 
