@@ -103,8 +103,10 @@ casper.then(function() {
     return {size:size, sizes:sizes};
   });
 
-  properties.push(retColor['color']);
-  propertiesAry.push(retColor['colors']);
+  if (retColor['colors'].length > 0) {
+    properties.push(retColor['color']);
+    propertiesAry.push(retColor['colors']);
+  }
   if (retSize["sizes"].length > 0) {
     properties.push(retSize['size']);
     propertiesAry.push(retSize['sizes']);
