@@ -288,6 +288,10 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.thehut.com":
       parser = './pageAutomation/thehut.js';
       break;
+    case "www.c21stores.com":
+      parser = './pageAutomation/c21stores.js';
+      break;
+    //TODO
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
