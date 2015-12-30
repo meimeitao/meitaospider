@@ -297,6 +297,12 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.levi.com":
       parser = './pageAutomation/levi.js';
       break;
+    case "www.cambridgesatchel.com":
+      parser = './pageAutomation/cambridgesatchel.js';
+      break;
+    case "www.loft.com":
+      parser = './pageAutomation/loft.js';
+      break;
     //TODO
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
