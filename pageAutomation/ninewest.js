@@ -20,15 +20,6 @@ var url = args[0];
 //  this.echo( 'Error: ' + msg, 'ERROR' );
 //});
 
-var GetProductAvailabilityFlag = false;
-
-casper.options.onResourceRequested = function(resource, request) {
-  if (request.url.indexOf("GetProductAvailability") > -1) {
-    //this.echo( 'Request Url is : ' + request.url);
-    GetProductAvailabilityFlag = true;
-  }
-};
-
 var retData = {};
 
 casper.start(url);
@@ -45,7 +36,7 @@ casper.then(function() {
     var colorID = "colorChips";
     var colorName = "color";
 
-    var colorOptions = document.querySelectorAll("#"+colorID+" img[option-name='"+colorName+"']");
+    var colorOptions = document.querySelectorAll("."+colorID+" img.selected_true");
     var color = {};
     color['name'] = colorName;
     color['id'] = colorID;
@@ -134,44 +125,8 @@ casper.then(function() {
       var selector = properties[y].id;
       tmpStock[selector] = selectValue;
     }
-    tmpStock['soldout'] = 1;
+    tmpStock['soldout'] = 0;
     stocks.push(tmpStock);
-  }
-
-  var tmpStock, stockValue, tmpTarget;
-  for (var x in stocks) {
-    tmpStock = stocks[x];
-
-    var clicked = this.evaluate(function setProperties(id, value) {
-      var ele = document.querySelector("#"+value+".selected_false");
-      if (ele) {
-        var evt = document.createEvent('CustomEvent');
-        evt.initCustomEvent('click', true, false);
-        ele.dispatchEvent(evt);
-        return true;
-      }
-      return false;
-    }, "colorChips", tmpStock["colorChips"]);
-
-    if (clicked) {
-      while (true) {
-        if (GetProductAvailabilityFlag) {
-          GetProductAvailabilityFlag = false;
-          break;
-        }
-      }
-    }
-
-    stockValue = this.evaluate(function(id, value) {
-      var sizeEle = document.querySelector("#"+value+".available");
-      return sizeEle ? true : false;
-    },"sizes",tmpStock["sizes"]);
-
-    if (stockValue) {
-      stocks[x].soldout = 0;
-    } else {
-      stocks[x].soldout = 1;
-    }
   }
 
   retData = {

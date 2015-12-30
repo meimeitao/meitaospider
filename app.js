@@ -291,12 +291,15 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.c21stores.com":
       parser = './pageAutomation/c21stores.js';
       break;
+    case "www.ninewest.com":
+      parser = './pageAutomation/ninewest.js';
+      break;
+    case "www.levi.com":
+      parser = './pageAutomation/levi.js';
+      break;
     //TODO
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
-    //  break;
-    //case "www.ninewest.com":
-    //  parser = './pageAutomation/ninewest.js';
     //  break;
     default:
       console.log("parser not found "+url);
