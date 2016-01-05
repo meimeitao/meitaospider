@@ -303,6 +303,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.loft.com":
       parser = './pageAutomation/loft.js';
       break;
+    case "store.americanapparel.net":
+      parser = './pageAutomation/americanapparel.js';
+      break;
     //TODO
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
