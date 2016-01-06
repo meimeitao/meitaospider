@@ -96,8 +96,6 @@ casper.then(function() {
         propertiesAry.push(sizes);
     }
 
-
-
     var stockObj = {};
     var stockMapping = cartesianProduct(propertiesAry);
     for (var x in stockMapping) {
