@@ -46,7 +46,7 @@ casper.then(function() {
         for (var j = 0; j < tmpProperty["s"].length; j++) {
             var tmpOption = tmpProperty["s"][j];
             var tmpName = tmpOption["s"];
-            var tmpID = tmpOption["i"];
+            var tmpID = String(tmpOption["i"]);
 
             var tmpObject = {
                 desc: tmpName
