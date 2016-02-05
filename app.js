@@ -321,6 +321,9 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "en.stylenanda.com":
       parser = './pageAutomation/stylenanda.js';
       break;
+    case "www.aeropostale.com":
+      parser = './pageAutomation/aeropostale.js';
+      break;
     //TODO
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';

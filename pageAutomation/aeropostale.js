@@ -40,7 +40,7 @@ casper.then(function() {
     var imageMap = this.evaluate(function() {
         var imageMap = {};
         for (var i = 0; i < imageMap_0.length; i++) {
-            var tmpImage = imageMap[i];
+            var tmpImage = imageMap_0[i];
             imageMap[tmpImage["cid"]] = {
                 "swatch": tmpImage["enh"],
                 "demo": tmpImage["reg"]
@@ -59,7 +59,7 @@ casper.then(function() {
 
     propertiesAry[0] = [];
     propertiesAry[1] = [];
-    for (var x in itemMap) {
+    for (var x = 0; x < itemMap.length; x++) {
         var tmpItem = itemMap[x];
         var tmpImage = imageMap[tmpItem["cId"]];
         var tmpDemo = siteUrl + tmpImage["demo"];
@@ -81,8 +81,8 @@ casper.then(function() {
             propertiesAry[0].push(tmpColor);
         }
 
-        var tmpSize = tmpItem["sDesc"].trim();
-        var tmpSizeText = tmpItem["sId"].trim();
+        var tmpSize = tmpItem["sId"].trim();
+        var tmpSizeText = tmpItem["sDesc"].trim();
         var tmpSizeObject = {
             desc: tmpSizeText
             , demo: ""
