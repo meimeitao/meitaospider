@@ -324,7 +324,10 @@ app.post('/salesProperties', urlencodedParser, function(req, res) {
     case "www.aeropostale.com":
       parser = './pageAutomation/aeropostale.js';
       break;
-    //TODO
+    case "www.radley.co.uk":
+      parser = './pageAutomation/radley.js';
+      break;
+    // 商品属性capser脚本添加在这里
     //case "www.myhabit.com":
     //  parser = './pageAutomation/myhabit.js';
     //  break;
