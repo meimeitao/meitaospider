@@ -482,7 +482,7 @@ app.get('/fetch', function(req, res){
   var url = req.query.url;
   var parser = '';
   var body = '';
-  var pt = spawn('phantomjs', ['--load-images=false', 'phantom.js', url]);
+  var pt = spawn('phantomjs2', ['--load-images=false', 'phantom.js', url]);
 
   pt.stdout.on('data', function (data) {
     body += data;
@@ -493,7 +493,7 @@ app.get('/fetch', function(req, res){
   });
 
   pt.on('close', function (code) {
-    var $ = cheerio.load(body);
+    var $ = cheerio.load(body, {decodeEntities: false});
     parser = '';
     hostname = urls.parse(url).hostname;
     switch(hostname){
@@ -576,6 +576,12 @@ app.get('/fetch', function(req, res){
         break;
       case "www.6pm.com":
         parser = './parser/6pm.js';
+        break;
+      case "blog.sina.com.cn":
+        parser = './parser/sinablog.js';
+        break;
+      case "mp.weixin.qq.com":
+        parser = './parser/weixin.js';
         break;
       default:
         console.log("parser not found "+url);

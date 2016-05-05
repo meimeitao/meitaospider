@@ -12,7 +12,9 @@
     "urls":"",
     "log4js":"",
     "body-parser":"",
-    "cartesian-product":""
+    "cartesian-product":"",
+    "true-html-escape":"",
+    "emoji-strip":""
   },
   "repository" : {
     "type" : "git",
