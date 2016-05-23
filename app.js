@@ -617,7 +617,7 @@ app.get('/bc/list', function(req, res){
 
   pt.on('close', function(code) {
     var $ = cheerio.load(body, {decodeEntities: true});
-    if (parser == '') {
+    if (!parser || parser == '') {
       parser = urls.parse(url).hostname;
     }
     var parserFile = './bc/list/' + parser + '.js';
