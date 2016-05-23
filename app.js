@@ -601,6 +601,25 @@ app.get('/fetch', function(req, res){
 
 });
 
+app.get('/bc/list', function(req, res){
+  var url = req.query.url;
+  var parser = req.query.parser;
+  var pt = spawn('phantomjs2', ['--load-images=false', 'phantom.js', url]);
+
+  pt.on('close', function(code) {
+    var $ = cheerio.load(body, {decodeEntities: false});
+    if (parser == '') {
+      parser = urls.parse(url).hostname;
+    }
+    var parserFile = './bc/list/' + parser + '.js';
+    var Parser = require(parserFile);
+    var json = (new Parser($)).getJSON();
+
+    res.set('Content-Type', 'application/json');
+    res.send(json);
+  });
+});
+
 app.listen(3001, function(){
   console.log('Express is listing 3001');
 });
