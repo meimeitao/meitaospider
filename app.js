@@ -604,6 +604,7 @@ app.get('/fetch', function(req, res){
 app.get('/bc/list', function(req, res){
   var url = req.query.url;
   var parser = req.query.parser;
+  var body = '';
   var pt = spawn('phantomjs2', ['--load-images=false', 'phantom.js', url]);
 
   pt.stdout.on('data', function(data) {
