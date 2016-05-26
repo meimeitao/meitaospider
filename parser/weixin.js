@@ -24,6 +24,11 @@ module.exports = function($) {
       imgs.push($(this).attr("data-src"));
     });
     obj.img = imgs;
+    obj.url = '';
+    var matched = /var msg_link = "(.+)#rd";/.exec($('script').text());
+    if (matched) {
+      obj.url = matched[1];
+    }
   	return JSON.stringify(obj);
   };
 }
