@@ -14,7 +14,7 @@ module.exports = function($) {
       content = content.replace(regex_a, "");
       content = content.replace(/<\/a>/g, "");
       regex_img = /(<img([^>]+)>)/ig
-      content = content.replace(regex_img, "#img#");
+      content = content.replace(regex_img, "\n#img#\n");
       regex = /(<([^>]+)>)/ig
       content = content.replace(regex, "");
     }
