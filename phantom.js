@@ -16,6 +16,17 @@ page.onResourceTimeout = function(e) {
 //  console.log(page.content);
 //  phantom.exit();
 //};
+if (args.length == 3) {
+  var referer = args[2];
+  if (referer != '') {
+    page.customHeaders = {
+      "Referer": referer
+    };
+    page.onInitialized = function() {
+      page.customHeaders = {};
+    };
+  }
+}
 page.open(url, function (status) {
   //Page is loaded!
   console.log(page.content);
