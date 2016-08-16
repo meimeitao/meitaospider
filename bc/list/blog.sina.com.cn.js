@@ -14,7 +14,7 @@ module.exports = function($, url) {
         var total = page.attr('total');
         var pagesize = page.attr('pagesize');
         var totalPages = Math.ceil(total / pagesize);
-        var pages = Math.max(totalPage, 10);
+        var pages = Math.max(totalPages, 10);
         obj.pages = [];
         for (var i = 2; i <= pages; ++i) {
           var path = '/s/article_sort_' + pageId + '_10001_' + i + '.html';
