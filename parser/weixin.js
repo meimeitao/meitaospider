@@ -21,7 +21,9 @@ module.exports = function($) {
     obj.content = content;
     var imgs = Array();
     this.$(".rich_media_content").find("img").each(function(i, elem){
-      imgs.push($(this).attr("data-src"));
+      var img = $(this).attr("data-src");
+      if (!img) img = $(this).attr("src");
+      imgs.push(img);
     });
     obj.img = imgs;
     obj.url = '';
